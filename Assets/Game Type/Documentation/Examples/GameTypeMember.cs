@@ -22,8 +22,14 @@ public class GameTypeMember : Teams.Base.BaseTeamMember {
             {
                 meshRenderer.material.color = teamToJoin.data.TeamColor;
             }
-            TestGameManager.instance.text.text = teamToJoin.data.TeamName;
-            GameManager.Instance.GameType.Points.AddPoints(teamToJoin, 0);
+            //gets here on build
+            //TestGameManager.instance.text.text = teamToJoin.data.TeamName;
+            TestGameManager.instance.text.text = "Build gets here";
+            GameManager.Instance.GameType.Points.AddPoints(teamToJoin, 500);
+            //cant pass here on build
+            TestGameManager.instance.text.text = "Build can't get here";
+            //gets here on play
+            TestGameManager.instance.text.text = GameManager.Instance.GameType.Points.CheckPoints(teamToJoin).ToString() + " Points";
             return true;
         }
         return false;

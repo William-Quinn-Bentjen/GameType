@@ -21,6 +21,6 @@ public class TestGameManager : MonoBehaviour {
         //}
 
         //debugs total count (comment out to have member set this to team name)
-        text.text = GameManager.Instance.GameType.Points.GetAllTeams().Count.ToString();    //teamCount + "\n" + teamNames;
+        //text.text = GameManager.Instance.GameType.Points.GetAllTeams().Count.ToString();    //teamCount + "\n" + teamNames;
     }
 }
