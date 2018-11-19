@@ -34,9 +34,17 @@ public class GameManager : MonoBehaviour {
                 instance = newInstance.AddComponent<GameManager>();
             }
 #else
-            //create new
-            GameObject newInstance = new GameObject("GameManager");
-            instance = newInstance.AddComponent<GameManager>();
+            GameManager gm = FindObjectOfType<GameManager>();
+            if (gm != null)
+            {
+                instance = gm;
+            }
+            else
+            {
+                //create new
+                GameObject newInstance = new GameObject("GameManager");
+                instance = newInstance.AddComponent<GameManager>();
+            }
 #endif
         }
     }
