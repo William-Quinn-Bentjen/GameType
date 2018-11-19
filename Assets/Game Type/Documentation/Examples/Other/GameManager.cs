@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+    
     static GameManager instance = null;
     public static GameManager Instance
     {
@@ -20,20 +21,6 @@ public class GameManager : MonoBehaviour {
     {
         if (instance == null)
         {
-#if UNITY_EDITOR
-            //find
-            if (FindObjectOfType<GameManager>() != null)
-            {
-                Debug.LogWarning("GameManager exists in scene but not hooked up as instance");
-                instance = FindObjectOfType<GameManager>();
-            }
-            else
-            {
-                //create new
-                GameObject newInstance = new GameObject("GameManager");
-                instance = newInstance.AddComponent<GameManager>();
-            }
-#else
             GameManager gm = FindObjectOfType<GameManager>();
             if (gm != null)
             {
@@ -45,13 +32,13 @@ public class GameManager : MonoBehaviour {
                 GameObject newInstance = new GameObject("GameManager");
                 instance = newInstance.AddComponent<GameManager>();
             }
-#endif
         }
     }
     public GameType GameType;
     // Use this for initialization
-    void Awake () {
-        if (instance == null)
+    void Awake()
+    {
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
         }
@@ -60,17 +47,17 @@ public class GameManager : MonoBehaviour {
             instance = this;
             if (GameType != null)
             {
-                GameType.GameBegin();
+                GameType.BeginGame();
             }
         }
-	}
+    }
     private void OnDestroy()
     {
         if (GameType != null)
         {
-            GameType.GameOver();
+            GameType.EndGame();
             GameType = null;
         }
-        
+
     }
 }

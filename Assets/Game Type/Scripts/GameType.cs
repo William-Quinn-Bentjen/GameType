@@ -4,77 +4,83 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
 public class GameType : ScriptableObject {
-
+    // Data
     /// <summary>
     /// Keeps the points and teams for this GameType
     /// </summary>
-    public PointKeeper Points;
+    public ScoreKeeper Score;
     /// <summary>
-    /// used to keep track of if the game has started 
+    /// Used to keep track of what state the game is currently in
     /// </summary>
-    public bool gameStarted = false;
-    /// <summary>
-    /// Starts the game
-    /// </summary>
-    public virtual void GameBegin()
-    {
-#if UNITY_EDITOR
-        if (gameStarted)
-        {
-            Debug.LogWarning("GameType can not start because it has already started");
-        }
-#endif
-        gameStarted = true;
-    }
-    /// <summary>
-    /// Ends the game
-    /// </summary>
-    public virtual void GameOver()
-    {
+    public GameState CurrentState = GameState.Lobby;
 
-#if UNITY_EDITOR
-        if (gameStarted == false)
-        {
-            Debug.LogWarning("GameType can not end because it hasn't started");
-        }
-#endif
-        gameStarted = false;
+    // Enums and structs
+    /// <summary>
+    /// States the game may be in
+    /// </summary>
+    public enum GameState
+    {
+        Lobby,
+        EnteringMap,
+        Starting,
+        InProgress,
+        Ending,
+        LeavingMap,
+        Aborted
+    }
+        
+    
+    // Used to give the gametype a scorekeeper when it's created
+    public void OnEnable()
+    {
+        Score = CreateInstance<ScoreKeeper>();
+    }
+    
+    // Virutal functions of GameType
+    /// <summary>
+    /// Used to Attempt to start the game
+    /// </summary>
+    /// <returns>If the game successfully started returns true</returns>
+    public virtual bool BeginGame()
+    {
+        return CanStart();
     }
     /// <summary>
-    /// Add a team to the GameType's point keeper
+    /// Things like minimum player checks should be done here to determine if the game can start
     /// </summary>
-    /// <param name="team">The team to be added to the point keeper</param>
-    /// <param name="startingPoints">The points the team should start with</param>
-    /// <returns>returns true if team was successfully added or false if the team already exists in the GameType's point keeper</returns>
-    public virtual bool AddTeam(Teams.Base.BaseTeam team, float startingPoints = 0)
+    /// <returns>If the game can start</returns>
+    public virtual bool CanStart()
     {
-        if (Points.ContainsTeam(team))
-        {
-            return false;
-        }
-        Points.SetPoints(team, startingPoints);
         return true;
     }
     /// <summary>
-    /// Used to add points to a team (note logic may be added here to end the game after a certain amount of points is reached)
+    /// Called before StartGame
     /// </summary>
-    /// <param name="team">The team to add points to</param>
-    /// <param name="pointsToAdd">How many points to add</param>
-    public virtual void AddPoints(Teams.Base.BaseTeam team, float pointsToAdd = 0)
+    public virtual void EnterMap()
     {
-        Points.AddPoints(team, pointsToAdd);
+        
     }
     /// <summary>
-    /// Used to set the amount of points a team has
+    /// Called at the begining of gameplay after the everthing is ready 
+    /// (after this is called the game will o
     /// </summary>
-    /// <param name="team">The team whos points will be set</param>
-    /// <param name="newPointsValue">The amount of points the team should now have</param>
-    public virtual void SetPoints(Teams.Base.BaseTeam team, float newPointsValue)
+    public virtual void StartPlay()
     {
-        Points.SetPoints(team, newPointsValue);
+
     }
-    private void OnEnable()
+    /// <summary>
+    /// Called at the end of gameplay 
+    /// (things like score can be sent off or saved before players should load to the end screen)
+    /// </summary>
+    public virtual void EndGame()
     {
-        Points = CreateInstance<PointKeeper>();
+
+    }
+    /// <summary>
+    /// Called after the game has ended and is the very last thing the gamemode does
+    /// </summary>
+    public virtual void LeaveMap()
+    {
+
     }
 }

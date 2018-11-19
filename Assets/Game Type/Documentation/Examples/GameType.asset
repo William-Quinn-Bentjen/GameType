@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c5eb873b2bd1947bfcaf5fc01df2cc, type: 3}
   m_Name: GameType
   m_EditorClassIdentifier: 
-  Points: {fileID: 0}
-  gameStarted: 0
+  Score: {fileID: 0}
+  gameState: 0
