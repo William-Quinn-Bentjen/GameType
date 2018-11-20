@@ -6,7 +6,7 @@ namespace Teams
 {
     namespace Base
     {
-        [CreateAssetMenu(fileName = "BaseTeamData", menuName = "Teams/Base/Data")]
+        [CreateAssetMenu(fileName = "BaseTeamData", menuName = "Team/Base/Data")]
         public class BaseTeamData : Abstract.TeamData
         {
             public string TeamName = "";

@@ -1,0 +1,14 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "Team/#SCRIPTNAME#/Data")]
+public class #SCRIPTNAME# : Teams.Base.BaseTeam {	
+	
+	// Use this for initialization
+	public void OnEnable()
+	{
+		TeamName = "";
+		TeamColor = Color.clear;
+	}
+}

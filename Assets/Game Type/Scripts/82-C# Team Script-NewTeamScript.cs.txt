@@ -1,0 +1,25 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "Team/#SCRIPTNAME#/Team")]
+public class #SCRIPTNAME# : Teams.Base.BaseTeam {	
+
+    // Joins the team
+    public override bool Join(Teams.Base.BaseTeamMember member)
+    {
+        return base.Join(member);
+    }
+	
+    // Leave the team
+    public override void Leave(Teams.Base.BaseTeamMember member)
+    {
+		return base.Leave(member);
+    }
+	
+    // Tells all members to leave and clears member list
+    public override void KickAll()
+    {
+		return base.KickAll();
+    }
+}

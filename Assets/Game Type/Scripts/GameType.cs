@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
+//[CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
 public class GameType : ScriptableObject {
     // Data
     /// <summary>
-    /// Keeps the points and teams for this GameType
+    /// The GameManager this gametype is hooked up to (used for coroutines)
     /// </summary>
-    public ScoreKeeper Score;
+    public MonoBehaviour GameManager;
+    /// <summary>
+    /// The total duration the game should be in seconds (0 is no limit)
+    /// </summary>
+    public float GameTimeLimit = 0;
+    /// <summary>
+    /// The time that the game has been running in realtime;
+    /// </summary>
+    private float GameTime = 0;
     /// <summary>
     /// Used to keep track of what state the game is currently in
     /// </summary>
@@ -28,15 +36,56 @@ public class GameType : ScriptableObject {
         LeavingMap,
         Aborted
     }
-        
-    
-    // Used to give the gametype a scorekeeper when it's created
+
+
+    // Used to give the gametype info when it's created
     public void OnEnable()
     {
-        Score = CreateInstance<ScoreKeeper>();
+        OnEnablePreform();
     }
-    
-    // Virutal functions of GameType
+
+
+    // Virutal functions
+    /// <summary>
+    /// what should be preformed when enable is called 
+    /// </summary>
+    protected virtual void OnEnablePreform()
+    {
+        
+    }
+    /// <summary>
+    /// Game timer (this is basically the tick function for GameTime)
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerator GameTimer()
+    {
+        // Set the game time to 0 because the timer just started
+        GameTime = 0;
+        // 0 for no limit
+        if (GameTimeLimit != 0)
+        {
+            // Actual timer logic
+            while (GameTime < GameTimeLimit)
+            {
+                GameTime += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            // End the game if the time is up
+            if (CurrentState == GameState.InProgress)
+            {
+                EndGame();
+            }
+        }
+        else
+        {
+            // Count until the game ends
+            while (CurrentState == GameState.InProgress)
+            {
+                GameTime += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+        }
+    }
     /// <summary>
     /// Used to Attempt to start the game
     /// </summary>
@@ -64,17 +113,17 @@ public class GameType : ScriptableObject {
     /// Called at the begining of gameplay after the everthing is ready 
     /// (after this is called the game will o
     /// </summary>
-    public virtual void StartPlay()
+    public virtual void StartGame()
     {
-
+        GameManager.StartCoroutine(GameTimer());
     }
     /// <summary>
-    /// Called at the end of gameplay 
+    /// Called at the end of gameplay
     /// (things like score can be sent off or saved before players should load to the end screen)
     /// </summary>
     public virtual void EndGame()
     {
-
+        GameManager.StopCoroutine(GameTimer());
     }
     /// <summary>
     /// Called after the game has ended and is the very last thing the gamemode does
@@ -82,5 +131,19 @@ public class GameType : ScriptableObject {
     public virtual void LeaveMap()
     {
 
+    }
+    public virtual bool AttemptJoin(Teams.Base.BaseTeam team, Teams.Base.BaseTeamMember member)
+    {
+        if (team != null && member != null)
+        {
+            return team.Join(member);
+        }
+        return false;
+        
+    }
+    public virtual bool AttemptLeave(Teams.Base.BaseTeamMember member)
+    {
+        member.team.Leave(member);
+        return true;
     }
 }

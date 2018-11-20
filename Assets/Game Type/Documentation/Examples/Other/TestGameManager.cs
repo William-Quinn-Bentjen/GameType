@@ -45,6 +45,6 @@ public class TestGameManager : MonoBehaviour {
         //}
         //text.text = debug;
 
-        text.text = GameManager.Instance.GameType.Score.scoreKeeper.Keys.Count.ToString();    //teamCount + "\n" + teamNames;
+        //text.text = GameManager.Instance.GameType.Score.scoreKeeper.Keys.Count.ToString();    //teamCount + "\n" + teamNames;
     }
 }

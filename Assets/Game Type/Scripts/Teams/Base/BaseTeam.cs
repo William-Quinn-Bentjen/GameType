@@ -6,7 +6,7 @@ namespace Teams
 {
     namespace Base
     {
-        [CreateAssetMenu(fileName = "BaseTeam", menuName = "Teams/Base/Team")]
+        [CreateAssetMenu(fileName = "BaseTeam", menuName = "Team/Base/Team")]
         public class BaseTeam : Abstract.Team
         {
             /// <summary>
@@ -17,6 +17,9 @@ namespace Teams
             /// List of team members
             /// </summary>
             public List<BaseTeamMember> members = new List<BaseTeamMember>();
+            public delegate void OnSuccessfullMember(BaseTeamMember member);
+            public OnSuccessfullMember OnSuccessfulJoin;
+            public OnSuccessfullMember OnSuccessfulLeave;
             /// <summary>
             /// Attempts to join the team
             /// </summary>
@@ -28,16 +31,18 @@ namespace Teams
                 if (member.team != null && member.team != this)
                 {
                     member.team.Leave(member);
-                    //join new team
-                    member.team = this;
                 }
                 //check if was on team members list
                 if (!members.Contains(member))
                 {
                     members.Add(member);
-                    return true;
                 }
-                return false;
+                //join new team
+                member.team = this;
+                //tell delegates it's joining after it's on the member list and has had it's screen changed
+                if (OnSuccessfulJoin != null) OnSuccessfulJoin(member);
+                return true;
+
             }
             /// <summary>
             /// Leave the team
@@ -48,6 +53,8 @@ namespace Teams
                 if (member.team == this)
                 {
                     members.Remove(member);
+                    //tell delegates it's leaving before it leaves so it can see the team it's leaving
+                    if (OnSuccessfulLeave != null) OnSuccessfulLeave(member);
                     member.team = null;
                 }
             }

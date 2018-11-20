@@ -22,6 +22,9 @@ namespace Teams
             }
             public JoinOn joinOn;
             public LeaveOn leaveOn;
+            public delegate void MemberDelegate(BaseTeamMember member);
+            public MemberDelegate OnJoin;
+            public MemberDelegate OnLeave;
             protected virtual void Awake()
             {
                 if (joinOn.Awake)
@@ -57,19 +60,16 @@ namespace Teams
             /// <returns>true if successfully joined the team</returns>
             protected virtual bool Join(Teams.Base.BaseTeam teamToJoin = null)
             {
-                if (teamToJoin != null)
+                BaseTeam teamToBeJoined = teamToJoin ?? team;
+                if (teamToBeJoined != null)
                 {
-                    if (team != null)
+                    if (GameManager.Instance.GameType != null)
                     {
-                        team.Leave(this);
-                    }
-                    return teamToJoin.Join(this);
-                }
-                else
-                {
-                    if (team != null)
-                    {
-                        return team.Join(this);
+                        if (GameManager.Instance.GameType.AttemptJoin(teamToBeJoined, this))
+                        {
+                            if (OnJoin != null) OnJoin(this);
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -82,7 +82,7 @@ namespace Teams
             {
                 if (team != null)
                 {
-                    team.Leave(this);
+                    GameManager.Instance.GameType.AttemptLeave(this);
                 }
                 return (team == null);
             }

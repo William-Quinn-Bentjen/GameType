@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour {
             instance = this;
             if (GameType != null)
             {
+                GameType.GameManager = this;
                 GameType.BeginGame();
             }
         }

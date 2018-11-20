@@ -9,11 +9,6 @@ public class GameTypeMember : Teams.Base.BaseTeamMember {
     {
         meshRenderer = GetComponent<MeshRenderer>();
     }
-    //protected override void Awake()
-    //{
-    //    base.Awake();
-    //}
-    // Use this for initialization
     protected override bool Join(BaseTeam teamToJoin = null)
     {
         if (base.Join(teamToJoin))
@@ -23,7 +18,7 @@ public class GameTypeMember : Teams.Base.BaseTeamMember {
                 meshRenderer.material.color = teamToJoin.data.TeamColor;
             }
             TestGameManager.instance.text.text = teamToJoin.data.TeamName;
-            GameManager.Instance.GameType.Score.scoreKeeper.Add(teamToJoin, 0); // AddPoints(teamToJoin, 0);
+            //GameManager.Instance.GameType.Score.scoreKeeper.Add(teamToJoin, 0); // AddPoints(teamToJoin, 0);
             return true;
         }
         return false;
