@@ -115,6 +115,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void StartGame()
     {
+        CurrentState = GameState.InProgress;
         GameManager.StartCoroutine(GameTimer());
     }
     /// <summary>

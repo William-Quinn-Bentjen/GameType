@@ -48,7 +48,11 @@ public class GameManager : MonoBehaviour {
             if (GameType != null)
             {
                 GameType.GameManager = this;
-                GameType.BeginGame();
+                if (GameType.BeginGame())
+                {
+                    GameType.StartGame();
+                    Debug.Log("Slayer Game Started!");
+                }
             }
         }
     }

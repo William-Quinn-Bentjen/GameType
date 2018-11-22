@@ -35,7 +35,7 @@ public class TeamSlayer : GameType {
 	
     // Called at the begining of gameplay after the everthing is ready 
     public override void StartGame()
-    { 
+    {
         base.StartGame();
     }
 	
@@ -44,6 +44,7 @@ public class TeamSlayer : GameType {
     public override void EndGame()
     {
         base.EndGame();
+        Debug.Log("GameOver");
     }
 	
     // Called after the game has ended and is the very last thing the gamemode does
@@ -95,8 +96,22 @@ public class TeamSlayer : GameType {
         {
             EnsureExistance(killer.team);
             score[killer.team] += killWorth;
+            WinConditionCheck(killer.team);
             Debug.Log("Killer " + killer.gameObject.name);
         }
         dead.gameObject.SetActive(false);
+    }
+    public void WinConditionCheck(Teams.Base.BaseTeam team)
+    {
+        if (CurrentState == GameState.InProgress)
+        {
+            EnsureExistance(team);
+            if (score[team] >= killsToWin)
+            {
+                Debug.Log("Winner Team " + team.data.TeamName);
+                CurrentState = GameState.Ending;
+                EndGame();
+            }
+        }
     }
 }

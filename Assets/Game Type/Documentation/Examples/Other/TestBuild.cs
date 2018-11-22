@@ -27,6 +27,23 @@ public class TestBuild : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        string teamName = "Name";
+        int teamMembers = 0;
+        bool memberHasTeam = false;
+        if (team != null && team.data != null)
+        {
+            teamName = team.data.TeamName;
+            teamMembers = team.members.Count;
+            if (member.team != null)
+            {
+                memberHasTeam = true;
+            }
+        }
+        TeamSlayer teamSlayer = (TeamSlayer)GameManager.Instance.GameType;
+        if (teamSlayer != null && teamSlayer.score.ContainsKey(team))
+        {
+            text.text = teamName + "\nMembers: " + teamMembers + "\nScore " + teamSlayer.score[team];
+        }
+        
+    }
 }

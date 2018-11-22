@@ -14,7 +14,7 @@ MonoBehaviour:
   GameManager: {fileID: 0}
   GameTimeLimit: 0
   CurrentState: 0
-  killsToWin: 10
+  killsToWin: 4
   startingScore: 0
   killWorth: 1
   suicideWorth: -1
