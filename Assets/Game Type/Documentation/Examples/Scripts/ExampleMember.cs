@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ExampleMember : Teams.Base.BaseTeamMember {
     public float deathAtImpact = 10;
+    public bool alive = true;
     public MeshRenderer meshRenderer;
     public Rigidbody rb;
     public delegate void MemberOtherDelegate(BaseTeamMember member, BaseTeamMember other);
@@ -22,7 +23,7 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.impulse.magnitude >= deathAtImpact)
+        if (alive && collision.impulse.magnitude >= deathAtImpact)
         {
             ExampleBullet exampleBullet = collision.gameObject.GetComponent<ExampleBullet>();
             if (exampleBullet != null)
@@ -33,6 +34,7 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
             else
             {
                 Death();
+                Debug.Log(collision.gameObject + " " + collision.impulse);
             }
         }
     }

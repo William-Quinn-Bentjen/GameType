@@ -13,9 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
   GameTimeLimit: 0
-  CurrentState: 0
+  CurrentState: 3
   killsToWin: 4
   startingScore: 0
   killWorth: 1
+  teamKillWorth: -1
   suicideWorth: -1
-  forceTeamColor: 1
+  forceTeamColor: 0

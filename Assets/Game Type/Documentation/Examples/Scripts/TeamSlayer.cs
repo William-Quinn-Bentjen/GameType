@@ -8,6 +8,7 @@ public class TeamSlayer : GameType {
     public int killsToWin = 10;
     public int startingScore = 0;
     public int killWorth = 1;
+    public int teamKillWorth = -1;
     public int suicideWorth = -1;
     public bool forceTeamColor = true;
     public Dictionary<Teams.Base.BaseTeam, float> score;
@@ -86,20 +87,25 @@ public class TeamSlayer : GameType {
     }
     public void EvaluateDeath(Teams.Base.BaseTeamMember dead, Teams.Base.BaseTeamMember killer)
     {
-        if (killer == null)
+        ExampleMember deadCheck = dead.GetComponent<ExampleMember>();
+        if (deadCheck != null && deadCheck.alive)
         {
-            EnsureExistance(dead.team);
-            score[dead.team] += suicideWorth;
-            Debug.Log("Suicide " + dead.gameObject.name);
+            if (killer == null)
+            {
+                EnsureExistance(dead.team);
+                score[dead.team] += suicideWorth;
+                Debug.Log("Suicide " + dead.gameObject.name);
+            }
+            else
+            {
+                EnsureExistance(killer.team);
+                score[killer.team] += killWorth;
+                WinConditionCheck(killer.team);
+                Debug.Log("Killer " + killer.gameObject.name);
+            }
+            dead.GetComponent<ExampleMember>().alive = false;
+            dead.gameObject.SetActive(false);
         }
-        else
-        {
-            EnsureExistance(killer.team);
-            score[killer.team] += killWorth;
-            WinConditionCheck(killer.team);
-            Debug.Log("Killer " + killer.gameObject.name);
-        }
-        dead.gameObject.SetActive(false);
     }
     public void WinConditionCheck(Teams.Base.BaseTeam team)
     {
