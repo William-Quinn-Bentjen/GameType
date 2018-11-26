@@ -5,7 +5,7 @@ namespace Teams
 {
     namespace Base
     {
-        public class BaseTeamObject : Abstract.TeamObject, ITeam
+        public class BaseTeamObject : MonoBehaviour, ITeam
         {
             public BaseTeam team;
             public virtual BaseTeam GetTeam()

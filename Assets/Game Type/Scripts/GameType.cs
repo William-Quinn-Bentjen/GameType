@@ -16,42 +16,13 @@ public class GameType : ScriptableObject {
     /// <summary>
     /// The time that the game has been running in realtime;
     /// </summary>
-    private float GameTime = 0;
-    /// <summary>
-    /// Used to keep track of what state the game is currently in
-    /// </summary>
-    public GameState CurrentState = GameState.Lobby;
-
-    // Enums and structs
-    /// <summary>
-    /// States the game may be in
-    /// </summary>
-    public enum GameState
-    {
-        Lobby,
-        EnteringMap,
-        Starting,
-        InProgress,
-        Ending,
-        LeavingMap,
-        Aborted
-    }
-
+    public float GameTime = 0;
+    
 
     // Used to give the gametype info when it's created
-    public void OnEnable()
+    public virtual void OnEnable()
     {
-        OnEnablePreform();
-    }
 
-
-    // Virutal functions
-    /// <summary>
-    /// what should be preformed when enable is called 
-    /// </summary>
-    protected virtual void OnEnablePreform()
-    {
-        
     }
     /// <summary>
     /// Game timer (this is basically the tick function for GameTime)
@@ -70,16 +41,13 @@ public class GameType : ScriptableObject {
                 GameTime += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
-            // End the game if the time is up
-            if (CurrentState == GameState.InProgress)
-            {
-                EndGame();
-            }
+            // End the game 
+            EndGame();
         }
         else
         {
             // Count until the game ends
-            while (CurrentState == GameState.InProgress)
+            while (true)
             {
                 GameTime += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
@@ -115,7 +83,6 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void StartGame()
     {
-        CurrentState = GameState.InProgress;
         GameManager.StartCoroutine(GameTimer());
     }
     /// <summary>
@@ -133,6 +100,12 @@ public class GameType : ScriptableObject {
     {
 
     }
+    /// <summary>
+    /// Tells the game type that a player is attempting to join the team
+    /// </summary>
+    /// <param name="team">The team the member is trying to join</param>
+    /// <param name="member">The member who's trying to join</param>
+    /// <returns>true if the join was successful</returns>
     public virtual bool AttemptJoin(Teams.Base.BaseTeam team, Teams.Base.BaseTeamMember member)
     {
         if (team != null && member != null)
@@ -142,6 +115,11 @@ public class GameType : ScriptableObject {
         return false;
         
     }
+    /// <summary>
+    /// Tells the game type that a player is attempting to leave the team they are on
+    /// </summary>
+    /// <param name="member">the member who is attempting to leave</param>
+    /// <returns>true if the leave was successful</returns>
     public virtual bool AttemptLeave(Teams.Base.BaseTeamMember member)
     {
         member.team.Leave(member);

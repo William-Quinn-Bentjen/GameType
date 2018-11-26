@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Teams.Base;
 using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
-[CreateAssetMenu(fileName = "TeamSlayer", menuName = "GameType/TeamSlayer")]
-public class TeamSlayer : GameType {
+[CreateAssetMenu(fileName = "TeamSlayer", menuName = "GameType/Example/TeamSlayer")]
+public class TeamSlayer : ExampleGameTypeIntegration {
     public int killsToWin = 10;
     public int startingScore = 0;
     public int killWorth = 1;
@@ -16,30 +16,12 @@ public class TeamSlayer : GameType {
     
 
 	// Use this for initialization
-    protected override void OnEnablePreform()
+    public override void OnEnable()
     {
-        base.OnEnablePreform();
+        base.OnEnable();
         score = new Dictionary<Teams.Base.BaseTeam, float>();
     }
-	
-    // Used to Attempt to start the game
-    public override bool BeginGame()
-    {
-        return base.BeginGame();
-    }
-	
-    // Things like minimum player checks should be done here to determine if the game can start
-    public override bool CanStart()
-    {
-		return base.CanStart();
-    }
-	
-    // Called at the begining of gameplay after the everthing is ready 
-    public override void StartGame()
-    {
-        base.StartGame();
-    }
-	
+
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
     public override void EndGame()
@@ -47,37 +29,18 @@ public class TeamSlayer : GameType {
         base.EndGame();
         Debug.Log("GameOver");
     }
-	
-    // Called after the game has ended and is the very last thing the gamemode does
-    public override void LeaveMap()
-    {
-		
-    }
-
-
-    public override bool AttemptJoin(BaseTeam team, BaseTeamMember member)
-    {
-        if (base.AttemptJoin(team, member))
-        {
-            EnsureExistance(team);
-            MemberJoinEffect(member);
-            return true;
-        }
-        return false;
-    }
-    public void MemberJoinEffect(Teams.Base.BaseTeamMember member)
+    public override void MemberJoinEffect(BaseTeamMember member)
     {
         ExampleMember exampleMember = member.GetComponent<ExampleMember>();
         if (exampleMember != null)
         {
-            // set team's color
-            if (forceTeamColor) exampleMember.meshRenderer.material.color = exampleMember.team.data.TeamColor;
+            if (forceTeamColor) exampleMember.meshRenderer.material.color = member.team.data.TeamColor;
+            //remove later?
             exampleMember.OnDeath = null;
             exampleMember.OnDeath += EvaluateDeath;
         }
     }
-
-    public void EnsureExistance(Teams.Base.BaseTeam team)
+    public override void EnsureExistance(BaseTeam team)
     {
         if (team != null && !score.ContainsKey(team))
         {
@@ -85,7 +48,7 @@ public class TeamSlayer : GameType {
             team.OnSuccessfulJoin += MemberJoinEffect;
         }
     }
-    public void EvaluateDeath(Teams.Base.BaseTeamMember dead, Teams.Base.BaseTeamMember killer)
+    public override void EvaluateDeath(BaseTeamMember dead, BaseTeamMember killer)
     {
         ExampleMember deadCheck = dead.GetComponent<ExampleMember>();
         if (deadCheck != null && deadCheck.alive)
@@ -100,24 +63,24 @@ public class TeamSlayer : GameType {
             {
                 EnsureExistance(killer.team);
                 score[killer.team] += killWorth;
-                WinConditionCheck(killer.team);
-                Debug.Log("Killer " + killer.gameObject.name);
+                EvaluateWinCondition(killer.team);
+                Debug.Log(killer.gameObject.name + " killed " + dead.name);
             }
-            dead.GetComponent<ExampleMember>().alive = false;
+            deadCheck.alive = false;
             dead.gameObject.SetActive(false);
         }
     }
-    public void WinConditionCheck(Teams.Base.BaseTeam team)
+    public override void EvaluateWinCondition(BaseTeam team)
     {
-        if (CurrentState == GameState.InProgress)
+        if (GameState.Key == ExampleGameState.InProgress)
         {
-            EnsureExistance(team);
             if (score[team] >= killsToWin)
             {
-                Debug.Log("Winner Team " + team.data.TeamName);
-                CurrentState = GameState.Ending;
+                Debug.Log("Winner team: " + team.data.TeamName);
+                GameState.StateChange(ExampleGameState.LeavingMap);
                 EndGame();
             }
         }
+
     }
 }

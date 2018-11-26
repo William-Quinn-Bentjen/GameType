@@ -29,12 +29,14 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
             if (exampleBullet != null)
             {
                 BaseTeamMember killer = exampleBullet.killer;
-                if (killer != null) Death(killer);
+                if (killer != null)
+                {
+                    Death(killer);
+                }
             }
             else
             {
                 Death();
-                Debug.Log(collision.gameObject + " " + collision.impulse);
             }
         }
     }

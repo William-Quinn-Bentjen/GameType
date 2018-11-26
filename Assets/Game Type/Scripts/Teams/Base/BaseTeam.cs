@@ -7,7 +7,7 @@ namespace Teams
     namespace Base
     {
         [CreateAssetMenu(fileName = "BaseTeam", menuName = "Team/Base/Team")]
-        public class BaseTeam : Abstract.Team
+        public class BaseTeam : ScriptableObject
         {
             /// <summary>
             /// Team's data such as name and color (excludes list of members)
