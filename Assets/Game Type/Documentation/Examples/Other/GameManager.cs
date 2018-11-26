@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
         }
     }
     public GameType GameType;
+    public WinUI winUI;
     // Use this for initialization
     void Awake()
     {
@@ -64,5 +65,12 @@ public class GameManager : MonoBehaviour {
             GameType = null;
         }
 
+    }
+    public void SetWinnerText(Teams.Team winner)
+    {
+        if (winUI != null)
+        {
+            winUI.SetWinnerText(winner);
+        }
     }
 }

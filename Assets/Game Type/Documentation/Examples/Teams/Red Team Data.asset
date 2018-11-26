@@ -8,8 +8,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c5eb873b2bd1947bfcaf5fc01df2cc, type: 3}
-  m_Name: GameType
-  m_EditorClassIdentifier: 
-  Score: {fileID: 0}
-  gameState: 0
+  m_Script: {fileID: 0}
+  m_Name: Red Team Data
+  m_EditorClassIdentifier: Assembly-CSharp:Teams:TeamData
+  TeamName: Red Team
+  TeamColor: {r: 1, g: 0, b: 0, a: 1}

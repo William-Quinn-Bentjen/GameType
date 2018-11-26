@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Teams.Base;
 using UnityEngine;
 /// <summary>
 /// A GameType with gametime and a gamestate built in

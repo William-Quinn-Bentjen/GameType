@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
   GameTimeLimit: 0
-  GameTime: 0
-  killsToWin: 10
+  GameTime: 4.6599965
+  killsToWin: 2
   startingScore: 0
   killWorth: 1
   teamKillWorth: -1

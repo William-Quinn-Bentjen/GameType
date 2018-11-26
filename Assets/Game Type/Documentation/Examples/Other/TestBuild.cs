@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TestBuild : MonoBehaviour {
-    public Teams.Base.BaseTeam team;
-    public Teams.Base.BaseTeamMember member;
+    public Teams.Team team;
+    public Teams.TeamMember member;
     public Text text;
 
     // Use this for initialization

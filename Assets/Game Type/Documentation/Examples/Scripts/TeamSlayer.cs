@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Teams.Base;
 using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "TeamSlayer", menuName = "GameType/Example/TeamSlayer")]
@@ -11,7 +10,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
     public int teamKillWorth = -1;
     public int suicideWorth = -1;
     public bool forceTeamColor = true;
-    public Dictionary<Teams.Base.BaseTeam, float> score;
+    public Dictionary<Teams.Team, float> score;
 
     
 
@@ -19,7 +18,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
     public override void OnEnable()
     {
         base.OnEnable();
-        score = new Dictionary<Teams.Base.BaseTeam, float>();
+        score = new Dictionary<Teams.Team, float>();
     }
 
     // Called at the end of gameplay 
@@ -29,7 +28,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
         base.EndGame();
         Debug.Log("GameOver");
     }
-    public override void MemberJoinEffect(BaseTeamMember member)
+    public override void MemberJoinEffect(Teams.TeamMember member)
     {
         ExampleMember exampleMember = member.GetComponent<ExampleMember>();
         if (exampleMember != null)
@@ -40,7 +39,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
             exampleMember.OnDeath += EvaluateDeath;
         }
     }
-    public override void EnsureExistance(BaseTeam team)
+    public override void EnsureExistance(Teams.Team team)
     {
         if (team != null && !score.ContainsKey(team))
         {
@@ -48,7 +47,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
             team.OnSuccessfulJoin += MemberJoinEffect;
         }
     }
-    public override void EvaluateDeath(BaseTeamMember dead, BaseTeamMember killer)
+    public override void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
     {
         ExampleMember deadCheck = dead.GetComponent<ExampleMember>();
         if (deadCheck != null && deadCheck.alive)
@@ -70,17 +69,16 @@ public class TeamSlayer : ExampleGameTypeIntegration {
             dead.gameObject.SetActive(false);
         }
     }
-    public override void EvaluateWinCondition(BaseTeam team)
+    public override void EvaluateWinCondition(Teams.Team team)
     {
         if (GameState.Key == ExampleGameState.InProgress)
         {
             if (score[team] >= killsToWin)
             {
                 Debug.Log("Winner team: " + team.data.TeamName);
-                GameState.StateChange(ExampleGameState.LeavingMap);
+                SetWinnerText(team);
                 EndGame();
             }
         }
-
     }
 }

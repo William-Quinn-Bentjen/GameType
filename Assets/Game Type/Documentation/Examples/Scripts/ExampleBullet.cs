@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExampleBullet : Teams.Base.BaseTeamObject {
-    public Teams.Base.BaseTeamMember killer;
+public class ExampleBullet : Teams.TeamObject {
+    public Teams.TeamMember killer;
     public Rigidbody rb;
     public float force;
-    public virtual void AssignKiller(Teams.Base.BaseTeamMember assignedKiller)
+    public virtual void AssignKiller(Teams.TeamMember assignedKiller)
     {
         team = assignedKiller.team;
     }

@@ -106,7 +106,7 @@ public class GameType : ScriptableObject {
     /// <param name="team">The team the member is trying to join</param>
     /// <param name="member">The member who's trying to join</param>
     /// <returns>true if the join was successful</returns>
-    public virtual bool AttemptJoin(Teams.Base.BaseTeam team, Teams.Base.BaseTeamMember member)
+    public virtual bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
     {
         if (team != null && member != null)
         {
@@ -120,7 +120,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     /// <param name="member">the member who is attempting to leave</param>
     /// <returns>true if the leave was successful</returns>
-    public virtual bool AttemptLeave(Teams.Base.BaseTeamMember member)
+    public virtual bool AttemptLeave(Teams.TeamMember member)
     {
         member.team.Leave(member);
         return true;

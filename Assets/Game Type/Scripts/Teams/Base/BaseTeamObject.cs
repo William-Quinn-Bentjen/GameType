@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Teams
 {
-    namespace Base
+    public class TeamObject : MonoBehaviour, ITeam
     {
-        public class BaseTeamObject : MonoBehaviour, ITeam
+        public Team team;
+        public virtual Team GetTeam()
         {
-            public BaseTeam team;
-            public virtual BaseTeam GetTeam()
-            {
-                return team;
-            }
+            return team;
         }
+    }
+    public interface ITeam
+    {
+        Team GetTeam();
     }
 }

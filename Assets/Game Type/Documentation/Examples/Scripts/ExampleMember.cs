@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Teams.Base;
 using UnityEngine;
 
-public class ExampleMember : Teams.Base.BaseTeamMember {
+public class ExampleMember : Teams.TeamMember {
     public float deathAtImpact = 10;
     public bool alive = true;
     public MeshRenderer meshRenderer;
     public Rigidbody rb;
-    public delegate void MemberOtherDelegate(BaseTeamMember member, BaseTeamMember other);
+    public delegate void MemberOtherDelegate(Teams.TeamMember member, Teams.TeamMember other);
     public MemberOtherDelegate OnDeath;
+    private void Reset()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+        rb = GetComponent<Rigidbody>();
+    }
     // Use this for initialization
     protected override void Awake()
     {
@@ -17,7 +21,7 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
         rb = GetComponent<Rigidbody>();
         base.Awake();
     }
-    public void Death(BaseTeamMember killer = null)
+    public void Death(Teams.TeamMember killer = null)
     {
         OnDeath(this, killer);
     }
@@ -28,7 +32,7 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
             ExampleBullet exampleBullet = collision.gameObject.GetComponent<ExampleBullet>();
             if (exampleBullet != null)
             {
-                BaseTeamMember killer = exampleBullet.killer;
+                Teams.TeamMember killer = exampleBullet.killer;
                 if (killer != null)
                 {
                     Death(killer);
@@ -39,5 +43,30 @@ public class ExampleMember : Teams.Base.BaseTeamMember {
                 Death();
             }
         }
+    }
+    protected override bool Join(Teams.Team teamToJoin = null)
+    {
+        Teams.Team teamToBeJoined = teamToJoin ?? team;
+        if (teamToBeJoined != null)
+        {
+            if (GameManager.Instance.GameType != null)
+            {
+                if (GameManager.Instance.GameType.AttemptJoin(teamToBeJoined, this))
+                {
+                    if (OnJoin != null) OnJoin(this);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    protected override bool Leave()
+    {
+        if (team != null)
+        {
+            team.Leave(this);
+            GameManager.Instance.GameType.AttemptLeave(this);
+        }
+        return (team == null);
     }
 }

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "Team/#SCRIPTNAME#/Team")]
-public class #SCRIPTNAME# : Teams.Base.BaseTeam {	
+public class #SCRIPTNAME# : Teams.BaseTeam {	
 
     // Joins the team
-    public override bool Join(Teams.Base.BaseTeamMember member)
+    public override bool Join(Teams.BaseTeamMember member)
     {
         return base.Join(member);
     }
 	
     // Leave the team
-    public override void Leave(Teams.Base.BaseTeamMember member)
+    public override void Leave(Teams.BaseTeamMember member)
     {
 		return base.Leave(member);
     }
