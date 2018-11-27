@@ -23,7 +23,7 @@ public class ExampleGameTypeIntegration : ExtendedGameType
             exampleMember.OnDeath += EvaluateDeath;
         }
     }
-    public virtual void EnsureExistance(Teams.Team team)
+    public virtual void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
     {
         if (team != null)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExampleMember : Teams.TeamMember {
+    public Color personalColor = Color.clear;
     public float deathAtImpact = 10;
     public bool alive = true;
     public MeshRenderer meshRenderer;

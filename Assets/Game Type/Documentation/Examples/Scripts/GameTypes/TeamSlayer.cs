@@ -39,7 +39,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
             exampleMember.OnDeath += EvaluateDeath;
         }
     }
-    public override void EnsureExistance(Teams.Team team)
+    public override void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
     {
         if (team != null && !score.ContainsKey(team))
         {
