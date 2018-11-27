@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 1bf8c1836291f2146a3ff69e2fa3060d, type: 2}
+  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
   joinOn:
     Awake: 1
     Enable: 0
@@ -412,7 +412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29d1543b3cd21f4c942aa95fdef3732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 390c2e86945d2964eb25f7c5199eac7c, type: 2}
   killer: {fileID: 433286413}
   rb: {fileID: 386181920}
   force: 990
@@ -616,7 +615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 390c2e86945d2964eb25f7c5199eac7c, type: 2}
+  team: {fileID: 11400000, guid: 8e424e92c3bf3954e820cae92656b79e, type: 2}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1014,7 +1013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54585f4b398e2a44811defdc6059688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 1bf8c1836291f2146a3ff69e2fa3060d, type: 2}
   member: {fileID: 2018860225}
   text: {fileID: 845136295}
 --- !u!114 &845136295
@@ -1103,7 +1101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 1bf8c1836291f2146a3ff69e2fa3060d, type: 2}
+  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1229,7 +1227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54585f4b398e2a44811defdc6059688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 390c2e86945d2964eb25f7c5199eac7c, type: 2}
   member: {fileID: 433286413}
   text: {fileID: 1873218375}
 --- !u!114 &1873218375
@@ -1422,7 +1419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 1bf8c1836291f2146a3ff69e2fa3060d, type: 2}
+  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1547,7 +1544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 1bf8c1836291f2146a3ff69e2fa3060d, type: 2}
+  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
   joinOn:
     Awake: 1
     Enable: 0

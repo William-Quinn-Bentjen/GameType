@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TestBuild : MonoBehaviour {
-    public Teams.Team team;
+    private Teams.Team team;
     public Teams.TeamMember member;
     public Text text;
 
     // Use this for initialization
     void Start () {
+        team = member.team;
         string teamName = "Name";
         int teamMembers = 0;
         bool memberHasTeam = false;
@@ -40,7 +41,7 @@ public class TestBuild : MonoBehaviour {
             }
         }
         TeamSlayer teamSlayer = (TeamSlayer)GameManager.Instance.GameType;
-        if (teamSlayer != null && teamSlayer.score.ContainsKey(team))
+        if (team != null && teamSlayer != null && teamSlayer.score.ContainsKey(team))
         {
             text.text = teamName + "\nMembers: " + teamMembers + "\nScore " + teamSlayer.score[team];
         }

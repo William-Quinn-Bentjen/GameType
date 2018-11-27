@@ -63,7 +63,10 @@ namespace Teams
         {
             for (int i = members.Count - 1; i >= 0; i--)
             {
-                Leave(members[i]);
+                if (members[i] != null)
+                {
+                    Leave(members[i]);
+                }
             }
             members.Clear();
         }

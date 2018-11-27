@@ -55,6 +55,13 @@ public class GameManager : MonoBehaviour {
                     Debug.Log("Slayer Game Started!");
                 }
             }
+            else
+            {
+                foreach(Teams.Team team in Resources.FindObjectsOfTypeAll<Teams.Team>())
+                {
+                    team.KickAll();
+                }
+            }
         }
     }
     private void OnDestroy()

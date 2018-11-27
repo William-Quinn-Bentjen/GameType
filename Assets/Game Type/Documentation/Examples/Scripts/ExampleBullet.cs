@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExampleBullet : Teams.TeamObject {
+public class ExampleBullet : MonoBehaviour, Teams.ITeam {
     public Teams.TeamMember killer;
     public Rigidbody rb;
     public float force;
-    public virtual void AssignKiller(Teams.TeamMember assignedKiller)
+    public Teams.Team GetTeam()
     {
-        team = assignedKiller.team;
+        if (killer == null) return null;
+        return killer.team;
     }
 	// Use this for initialization
 	void Awake () {
-        AssignKiller(killer);
         if (rb == null)
         {
             rb = GetComponent<Rigidbody>();
