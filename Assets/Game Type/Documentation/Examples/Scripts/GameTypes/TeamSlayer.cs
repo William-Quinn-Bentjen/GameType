@@ -10,7 +10,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
     public int teamKillWorth = -1;
     public int suicideWorth = -1;
     public bool forceTeamColor = true;
-    public Dictionary<Teams.Team, float> score;
+    public Dictionary<Teams.Team, float> score = new Dictionary<Teams.Team, float>();
 
     
 
@@ -25,8 +25,13 @@ public class TeamSlayer : ExampleGameTypeIntegration {
     // (things like score can be sent off or saved before players should load to the end screen)
     public override void EndGame()
     {
-        base.EndGame();
-        Debug.Log("GameOver");
+        if (GameState.CurrentState.Key == ExampleGameState.InProgress)
+        {
+            GameManager.StopCoroutine(GameTimer());
+            GameState.StateChange(ExampleGameState.Ending);
+            Debug.Log("GameOver");
+        }
+        
     }
     public override void MemberJoinEffect(Teams.TeamMember member)
     {

@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58cf77e9f3cf71b40ab3e40464cac933, type: 3}
   m_Name: Infected
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: 8229e742943010049ac634d03c4f0b46, type: 2}
   members: []

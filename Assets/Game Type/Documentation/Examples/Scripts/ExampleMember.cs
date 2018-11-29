@@ -24,7 +24,7 @@ public class ExampleMember : Teams.TeamMember {
     }
     public void Death(Teams.TeamMember killer = null)
     {
-        OnDeath(this, killer);
+        if (OnDeath!= null)OnDeath(this, killer);
     }
     private void OnCollisionEnter(Collision collision)
     {

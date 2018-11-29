@@ -56,7 +56,7 @@ public class ExtendedGameType : GameType
     public override void EndGame()
     {
         base.EndGame();
-        if (GameState.States.ContainsKey(ExampleGameState.Ending)) GameState.StateChange(ExampleGameState.Ending);
+        if (GameState.States.ContainsKey(ExampleGameState.InProgress)) GameState.StateChange(ExampleGameState.Ending);
     }
     // Called after the game has ended and is the very last thing the gamemode does
     public override void LeaveMap()
@@ -104,11 +104,32 @@ public class ExtendedGameType : GameType
         /// <summary>
         /// A dictionary of states and keys
         /// </summary>
-        public Dictionary<T, State> States = new Dictionary<T, State>();
+        public Dictionary<T, State> States;
+        protected State _currentState;
         /// <summary>
         /// the current state of the state machine
         /// </summary>
-        public State CurrentState = null;
+        public State CurrentState
+        {
+            get
+            {
+                return _currentState;
+            }
+            set
+            {
+                if (value != _currentState)
+                {
+                    if (_currentState != null && _currentState.OnEnd != null)_currentState.OnEnd(_currentState, value);
+                    State tempState = _currentState;
+                    _currentState = value;
+                    if (value != null)
+                    {
+                        if (_currentState != null && _currentState.OnStart != null) _currentState.OnStart(tempState, _currentState);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// the current state's key (returns key default if current state is null)
         /// </summary>
@@ -116,9 +137,9 @@ public class ExtendedGameType : GameType
         {
             get
             {
-                if (CurrentState != null && CurrentState.Key != null)
+                if (_currentState != null && _currentState.Key != null)
                 {
-                    return CurrentState.Key;
+                    return _currentState.Key;
                 }
                 return default(T);
             }
@@ -136,9 +157,10 @@ public class ExtendedGameType : GameType
         public StateMachine(Dictionary<T, State> states, State currentState, bool ignoreOnStart = false)
         {
             States = states;
-            AddState(currentState);
+            if (states.ContainsKey(currentState.Key) == false) AddState(currentState);
+            _currentState = currentState;
             if (ignoreOnStart == false && currentState != null && currentState.OnStart != null) currentState.OnStart(null, currentState);
-            CurrentState = currentState;
+            
         }
         /// <summary>
         /// Ensure state is added properly
@@ -161,7 +183,7 @@ public class ExtendedGameType : GameType
         {
             if (States.ContainsKey(oldState.Key))
             {
-                if (CurrentState == oldState)
+                if (_currentState == oldState)
                 {
                     StateChange(newState, false, ignoreOnEndIfCurrent);
                 }
@@ -174,16 +196,16 @@ public class ExtendedGameType : GameType
         /// <param name="newState">The state you wish to chage to</param>
         public void StateChange(State newState, bool ignoreOnStart = false, bool ignoreOnEnd = false)
         {
-            if (CurrentState != null && newState != null)
+            if (_currentState != null && newState != null)
             {
                 if (States.ContainsKey(newState.Key) == false && States.ContainsValue(newState) == false)
                 {
                     States.Add(newState.Key, newState);
                 }
-                if (ignoreOnStart == false && CurrentState.OnEnd != null) CurrentState.OnEnd(CurrentState, newState);
-                State oldState = CurrentState;
-                CurrentState = newState;
-                if (ignoreOnEnd == false && CurrentState.OnStart != null) CurrentState.OnStart(oldState, CurrentState);
+                if (ignoreOnStart == false && _currentState.OnEnd != null) _currentState.OnEnd(_currentState, newState);
+                State oldState = _currentState;
+                _currentState = newState;
+                if (ignoreOnEnd == false && _currentState.OnStart != null) _currentState.OnStart(oldState, _currentState);
             }
         }
         public void StateChange(T newStateKey, bool ignoreOnStart = false, bool ignoreOnEnd = false)

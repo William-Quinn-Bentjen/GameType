@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour {
         if (GameType != null)
         {
             GameType.EndGame();
-            GameType = null;
+            //GameType = null;
         }
 
     }
