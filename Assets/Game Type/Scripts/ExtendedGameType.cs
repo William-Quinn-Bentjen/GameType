@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public class ExtendedGameType : GameType
 {
-
     // Enums and structs
     /// <summary>
     /// States the game may be in
@@ -49,7 +48,7 @@ public class ExtendedGameType : GameType
     {
         if (GameState.States.ContainsKey(ExampleGameState.Starting)) GameState.StateChange(ExampleGameState.Starting);
         if (GameState.States.ContainsKey(ExampleGameState.InProgress)) GameState.StateChange(ExampleGameState.InProgress);
-        GameManager.StartCoroutine(GameTimer());
+        StartRound();
     }
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
@@ -69,7 +68,16 @@ public class ExtendedGameType : GameType
         // Set the game time to 0 because the timer just started
         GameTime = 0;
         // 0 for no limit
-        if (GameTimeLimit != 0)
+        if (GameTimeLimit <= 0)
+        {
+            // Count until the game ends
+            while (GameState.Key == ExampleGameState.InProgress)
+            {
+                GameTime += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+        }
+        else
         {
             // Actual timer logic
             while (GameTime < GameTimeLimit)
@@ -81,19 +89,45 @@ public class ExtendedGameType : GameType
             {   // End the game 
                 EndGame();
             }
-            
         }
-        else
+    }
+    public virtual IEnumerator RoundTimer()
+    {
+        if (RoundTimeLimit <= 0)
         {
-            // Count until the game ends
-            while (GameState.Key == ExampleGameState.InProgress)
+            while (true)
             {
-                GameTime += Time.deltaTime;
+                RoundTime += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }
+        else
+        {
+            while (RoundTime < RoundTimeLimit)
+            {
+                RoundTime += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            EndRound();
+        }
     }
 
+    //rounds
+    public float RoundTimeLimit;
+    public float RoundTime;
+    public int CurrentRound = 0;
+
+    public virtual void EndRound()
+    {
+        GameManager.StopCoroutine(GameTimer());
+        GameManager.StopCoroutine(RoundTimer());
+    }
+    public virtual void StartRound()
+    {
+        GameManager.StartCoroutine(GameTimer());
+        GameManager.StartCoroutine(RoundTimer());
+        CurrentRound++;
+    }
 
 
 
@@ -142,6 +176,13 @@ public class ExtendedGameType : GameType
                     return _currentState.Key;
                 }
                 return default(T);
+            }
+            set
+            {
+                if (States.ContainsKey(value))
+                {
+                    CurrentState = States[value];
+                }
             }
 
         }
