@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Teams;
 using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "Infection", menuName = "GameType/Example/Infection")]
@@ -78,12 +79,12 @@ public class Infection : ExampleGameTypeIntegration
         base.EndGame();
         if (SurvivorTeam.members.Count <= 0)
         {
-            Debug.Log("Winner team: " + InfectedTeam.data.TeamName);
+            Debug.Log("Winning team: " + InfectedTeam.data.TeamName);
             SetWinnerText(InfectedTeam);
         }
         else
         {
-            Debug.Log("Winner team: " + SurvivorTeam.data.TeamName);
+            Debug.Log("Winning team: " + SurvivorTeam.data.TeamName);
             foreach(Teams.TeamMember member in SurvivorTeam.members)
             {
                 if (member != null)
@@ -162,6 +163,11 @@ public class Infection : ExampleGameTypeIntegration
                 {
                     // Team kill
                     score[killer] += teamKillWorth;
+                    if (dead.team != InfectedTeam)
+                    {
+                        if (teamKilledGetInfected) Infect(deadCheck);
+                        if (teamKillersGetInfected) Infect(killer as ExampleMember);
+                    }
                 }
                 else if (killer.team == InfectedTeam && dead.team == SurvivorTeam)
                 {
@@ -187,10 +193,15 @@ public class Infection : ExampleGameTypeIntegration
     }
     public virtual void Infect(ExampleMember member)
     {
-        if (forceInfectedMesh) member.GetComponent<MeshFilter>().mesh = infectedMesh;
-        if (forceInfectedTeamColor) member.meshRenderer.material.color = InfectedTeam.data.TeamColor;
-        InfectedTeam.Join(member.gameObject.AddComponent<ExampleInfectedMember>());
-        if (member as ExampleInfectedMember != true) Destroy(member);
+        if (member as ExampleInfectedMember == false)
+        {
+            if (forceInfectedMesh) member.GetComponent<MeshFilter>().mesh = infectedMesh;
+            if (forceInfectedTeamColor) member.meshRenderer.material.color = InfectedTeam.data.TeamColor;
+            ExampleInfectedMember example = member.gameObject.AddComponent<ExampleInfectedMember>();
+            InfectedTeam.Join(example);
+            if (member as ExampleInfectedMember != true) Destroy(member);
+        }
+        
 
     }
     public override void EvaluateWinCondition(Teams.Team team)
@@ -223,11 +234,19 @@ public class Infection : ExampleGameTypeIntegration
             InfectedTeam.OnSuccessfulJoin = null;
             InfectedTeam.OnSuccessfulJoin += InfectedMemberJoinEffect;
             InfectedTeam.OnSuccessfulJoin += MemberJoinEffect;
+            InfectedTeam.OnAttemptJoin = null;
+            InfectedTeam.OnAttemptJoin += AttemptJoin;
         }
         if (SurvivorTeam != null)
         {
             SurvivorTeam.OnSuccessfulJoin = null;
             SurvivorTeam.OnSuccessfulJoin += MemberJoinEffect;
+            SurvivorTeam.OnAttemptJoin = null;
+            SurvivorTeam.OnAttemptJoin = AttemptJoin;
         }
+    }
+    public bool AttemptJoin(TeamMember member)
+    {
+        return true;
     }
 }

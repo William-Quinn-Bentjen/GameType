@@ -24,6 +24,10 @@ public class ExampleMember : Teams.TeamMember {
             meshRenderer.material.color = personalColor;
         }
         rb = GetComponent<Rigidbody>();
+        if (GameManager.Instance.GameType is ExampleGameTypeIntegration)
+        {
+            OnDeath += (GameManager.Instance.GameType as ExampleGameTypeIntegration).EvaluateDeath;
+        }
         base.Awake();
     }
     public void Death(Teams.TeamMember killer = null)
