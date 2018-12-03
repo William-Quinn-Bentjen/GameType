@@ -3,7 +3,11 @@ guid: d7460caa36723ec4aa6ede9929d3f92a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - GameManager: {instanceID: 0}
+  - InfectedTeam: {instanceID: 0}
+  - SurvivorTeam: {instanceID: 0}
+  - infectedMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

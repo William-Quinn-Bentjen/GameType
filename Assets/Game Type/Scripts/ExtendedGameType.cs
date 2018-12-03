@@ -6,6 +6,12 @@ using UnityEngine;
 /// </summary>
 public class ExtendedGameType : GameType
 {
+    /// <summary>
+    /// keeps track of what state the game is in
+    /// </summary>
+    public StateMachine<ExampleGameState> GameState = new StateMachine<ExampleGameState>();
+
+
     // Enums and structs
     /// <summary>
     /// States the game may be in
@@ -20,10 +26,7 @@ public class ExtendedGameType : GameType
         LeavingMap,
         Aborted
     }
-    /// <summary>
-    /// keeps track of what state the game is in
-    /// </summary>
-    public StateMachine<ExampleGameState> GameState = new StateMachine<ExampleGameState>();
+    
 
     public override void OnEnable()
     {
@@ -66,23 +69,23 @@ public class ExtendedGameType : GameType
     public override IEnumerator GameTimer()
     {
         // Set the game time to 0 because the timer just started
-        GameTime = 0;
+        GameTimerValues.Time = 0;
         // 0 for no limit
-        if (GameTimeLimit <= 0)
+        if (GameTimerValues.TimeLimit <= 0)
         {
             // Count until the game ends
             while (GameState.Key == ExampleGameState.InProgress)
             {
-                GameTime += Time.deltaTime;
+                GameTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }
         else
         {
             // Actual timer logic
-            while (GameTime < GameTimeLimit)
+            while (GameTimerValues.Time < GameTimerValues.TimeLimit)
             {
-                GameTime += Time.deltaTime;
+                GameTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
             if (GameState.Key == ExampleGameState.InProgress)
@@ -93,19 +96,19 @@ public class ExtendedGameType : GameType
     }
     public virtual IEnumerator RoundTimer()
     {
-        if (RoundTimeLimit <= 0)
+        if (RoundTimerValues.TimeLimit <= 0)
         {
             while (true)
             {
-                RoundTime += Time.deltaTime;
+                RoundTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }
         else
         {
-            while (RoundTime < RoundTimeLimit)
+            while (RoundTimerValues.Time < RoundTimerValues.TimeLimit)
             {
-                RoundTime += Time.deltaTime;
+                RoundTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
             EndRound();
@@ -113,8 +116,7 @@ public class ExtendedGameType : GameType
     }
 
     //rounds
-    public float RoundTimeLimit;
-    public float RoundTime;
+    public TimerProperties RoundTimerValues = new TimerProperties();
     public int CurrentRound = 0;
 
     public virtual void EndRound()

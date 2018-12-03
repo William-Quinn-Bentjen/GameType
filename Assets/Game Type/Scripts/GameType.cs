@@ -4,20 +4,26 @@ using UnityEngine;
 
 //[CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
 public class GameType : ScriptableObject {
+    [Header("Basic Settings")]
     // Data
     /// <summary>
     /// The GameManager this gametype is hooked up to (used for coroutines)
     /// </summary>
     public MonoBehaviour GameManager;
-    /// <summary>
-    /// The total duration the game should be in seconds (0 is no limit)
-    /// </summary>
-    public float GameTimeLimit = 0;
-    /// <summary>
-    /// The time that the game has been running in realtime;
-    /// </summary>
-    public float GameTime = 0;
-    
+    [System.Serializable]
+    public struct TimerProperties
+    {
+        /// <summary>
+        /// The total duration in seconds (0 is no limit)
+        /// </summary>
+        public float TimeLimit;
+        /// <summary>
+        /// The time that the timer has been running in realtime;
+        /// </summary>
+        public float Time;
+    }
+    public TimerProperties GameTimerValues = new TimerProperties();
+
 
     // Used to give the gametype info when it's created
     public virtual void OnEnable()
@@ -31,14 +37,14 @@ public class GameType : ScriptableObject {
     public virtual IEnumerator GameTimer()
     {
         // Set the game time to 0 because the timer just started
-        GameTime = 0;
+        GameTimerValues.Time = 0;
         // 0 for no limit
-        if (GameTimeLimit != 0)
+        if (GameTimerValues.TimeLimit != 0)
         {
             // Actual timer logic
-            while (GameTime < GameTimeLimit)
+            while (GameTimerValues.Time < GameTimerValues.TimeLimit)
             {
-                GameTime += Time.deltaTime;
+                GameTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
             // End the game 
@@ -49,7 +55,7 @@ public class GameType : ScriptableObject {
             // Count until the game ends
             while (true)
             {
-                GameTime += Time.deltaTime;
+                GameTimerValues.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }

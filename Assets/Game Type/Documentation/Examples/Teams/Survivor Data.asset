@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3684c351e4f02d548bb07e7553b63129, type: 3}
   m_Name: Survivor Data
   m_EditorClassIdentifier: 
-  TeamName: 
-  TeamColor: {r: 0, g: 0, b: 0, a: 0}
+  TeamName: Survivors
+  TeamColor: {r: 0, g: 0.779325, b: 1, a: 0}

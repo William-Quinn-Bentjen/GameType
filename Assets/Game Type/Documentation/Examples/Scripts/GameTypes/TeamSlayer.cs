@@ -4,12 +4,16 @@ using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "TeamSlayer", menuName = "GameType/Example/TeamSlayer")]
 public class TeamSlayer : ExampleGameTypeIntegration {
+    [Space(10)]
+    [Header("Game Settings")]
+    public bool forceTeamColor = true;
+    [Space(10)]
+    [Header("Scoreing Settings")]
     public int killsToWin = 10;
     public int startingScore = 0;
     public int killWorth = 1;
     public int teamKillWorth = -1;
     public int suicideWorth = -1;
-    public bool forceTeamColor = true;
     public Dictionary<Teams.Team, float> score = new Dictionary<Teams.Team, float>();
 
     

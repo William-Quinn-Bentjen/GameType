@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Name: TeamSlayer
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
-  GameTimeLimit: 0
-  GameTime: 0.21999997
+  GameTimerValues:
+    TimeLimit: 0
+    Time: 12.300092
+  RoundTimerValues:
+    TimeLimit: 0
+    Time: 12.860105
+  CurrentRound: 1
+  forceTeamColor: 1
   killsToWin: 3
   startingScore: 0
   killWorth: 1
   teamKillWorth: -1
   suicideWorth: -1
-  forceTeamColor: 1

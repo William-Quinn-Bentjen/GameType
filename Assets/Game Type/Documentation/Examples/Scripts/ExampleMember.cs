@@ -19,6 +19,10 @@ public class ExampleMember : Teams.TeamMember {
     protected override void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null && personalColor != Color.clear)
+        {
+            meshRenderer.material.color = personalColor;
+        }
         rb = GetComponent<Rigidbody>();
         base.Awake();
     }

@@ -11,15 +11,25 @@ namespace Teams
         {
             public bool Awake = true;
             public bool Enable = false;
+            public JoinOn(bool awake = true, bool enable = false)
+            {
+                Awake = awake;
+                Enable = enable;
+            }
         }
         [System.Serializable]
         public class LeaveOn
         {
             public bool Destory = false;
             public bool Disable = false;
+            public LeaveOn(bool destroy = false, bool disable = false)
+            {
+                Destory = destroy;
+                Disable = disable;
+            }
         }
-        public JoinOn joinOn;
-        public LeaveOn leaveOn;
+        public JoinOn joinOn = new JoinOn();
+        public LeaveOn leaveOn = new LeaveOn();
         public delegate void MemberDelegate(TeamMember member);
         public MemberDelegate OnJoin;
         public MemberDelegate OnLeave;
