@@ -1,0 +1,20 @@
+GameType
+	GM
+	game timer
+	join 
+	leave
+	BeginGame->LeaveMap
+ExtGameType
+	GameState
+	Rounds
+		round timer
+		CurrentRound
+		StartRound
+		EndRound
+Integration
+	fill in attempt join
+	evaluate death
+	win conditions?
+	join effects?
+GameType(Slayer, Infection)
+	everything else

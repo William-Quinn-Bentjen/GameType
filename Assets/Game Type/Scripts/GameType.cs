@@ -2,79 +2,133 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
+//[CreateAssetMenu(fileName = "GameType", menuName = "GameTypes/Base/GameType")]
 public class GameType : ScriptableObject {
-
+    [Header("Basic Settings")]
+    // Data
     /// <summary>
-    /// Keeps the points and teams for this GameType
+    /// The GameManager this gametype is hooked up to (used for coroutines)
     /// </summary>
-    public PointKeeper Points;
-    /// <summary>
-    /// used to keep track of if the game has started 
-    /// </summary>
-    public bool gameStarted = false;
-    /// <summary>
-    /// Starts the game
-    /// </summary>
-    public virtual void GameBegin()
+    public MonoBehaviour GameManager;
+    [System.Serializable]
+    public struct TimerProperties
     {
-#if UNITY_EDITOR
-        if (gameStarted)
-        {
-            Debug.LogWarning("GameType can not start because it has already started");
-        }
-#endif
-        gameStarted = true;
+        /// <summary>
+        /// The total duration in seconds (0 is no limit)
+        /// </summary>
+        public float TimeLimit;
+        /// <summary>
+        /// The time that the timer has been running in realtime;
+        /// </summary>
+        public float Time;
     }
-    /// <summary>
-    /// Ends the game
-    /// </summary>
-    public virtual void GameOver()
+    public TimerProperties GameTimerValues = new TimerProperties();
+
+
+    // Used to give the gametype info when it's created
+    public virtual void OnEnable()
     {
 
-#if UNITY_EDITOR
-        if (gameStarted == false)
-        {
-            Debug.LogWarning("GameType can not end because it hasn't started");
-        }
-#endif
-        gameStarted = false;
     }
     /// <summary>
-    /// Add a team to the GameType's point keeper
+    /// Game timer (this is basically the tick function for GameTime)
     /// </summary>
-    /// <param name="team">The team to be added to the point keeper</param>
-    /// <param name="startingPoints">The points the team should start with</param>
-    /// <returns>returns true if team was successfully added or false if the team already exists in the GameType's point keeper</returns>
-    public virtual bool AddTeam(Teams.Base.BaseTeam team, float startingPoints = 0)
+    /// <returns></returns>
+    public virtual IEnumerator GameTimer()
     {
-        if (Points.ContainsTeam(team))
+        // Set the game time to 0 because the timer just started
+        GameTimerValues.Time = 0;
+        // 0 for no limit
+        if (GameTimerValues.TimeLimit != 0)
         {
-            return false;
+            // Actual timer logic
+            while (GameTimerValues.Time < GameTimerValues.TimeLimit)
+            {
+                GameTimerValues.Time += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            // End the game 
+            EndGame();
         }
-        Points.SetPoints(team, startingPoints);
+        else
+        {
+            // Count until the game ends
+            while (true)
+            {
+                GameTimerValues.Time += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+        }
+    }
+    /// <summary>
+    /// Used to Attempt to start the game
+    /// </summary>
+    /// <returns>If the game successfully started returns true</returns>
+    public virtual bool BeginGame()
+    {
+        return CanStart();
+    }
+    /// <summary>
+    /// Things like minimum player checks should be done here to determine if the game can start
+    /// </summary>
+    /// <returns>If the game can start</returns>
+    public virtual bool CanStart()
+    {
         return true;
     }
     /// <summary>
-    /// Used to add points to a team (note logic may be added here to end the game after a certain amount of points is reached)
+    /// Called before StartGame
     /// </summary>
-    /// <param name="team">The team to add points to</param>
-    /// <param name="pointsToAdd">How many points to add</param>
-    public virtual void AddPoints(Teams.Base.BaseTeam team, float pointsToAdd = 0)
+    public virtual void EnterMap()
     {
-        Points.AddPoints(team, pointsToAdd);
+        
     }
     /// <summary>
-    /// Used to set the amount of points a team has
+    /// Called at the begining of gameplay after the everthing is ready 
+    /// (after this is called the game will o
     /// </summary>
-    /// <param name="team">The team whos points will be set</param>
-    /// <param name="newPointsValue">The amount of points the team should now have</param>
-    public virtual void SetPoints(Teams.Base.BaseTeam team, float newPointsValue)
+    public virtual void StartGame()
     {
-        Points.SetPoints(team, newPointsValue);
+        GameManager.StartCoroutine(GameTimer());
     }
-    private void OnEnable()
+    /// <summary>
+    /// Called at the end of gameplay
+    /// (things like score can be sent off or saved before players should load to the end screen)
+    /// </summary>
+    public virtual void EndGame()
     {
-        Points = CreateInstance<PointKeeper>();
+        GameManager.StopCoroutine(GameTimer());
+    }
+    /// <summary>
+    /// Called after the game has ended and is the very last thing the gamemode does
+    /// </summary>
+    public virtual void LeaveMap()
+    {
+
+    }
+    /// <summary>
+    /// Tells the game type that a player is attempting to join the team
+    /// </summary>
+    /// <param name="team">The team the member is trying to join</param>
+    /// <param name="member">The member who's trying to join</param>
+    /// <returns>true if the join was successful</returns>
+    public virtual bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
+    {
+        if (team != null && member != null)
+        {
+            return team.Join(member);
+        }
+        return false;
+        
+    }
+    /// <summary>
+    /// Tells the game type that a player is attempting to leave the team they are on
+    /// </summary>
+    /// <param name="member">the member who is attempting to leave</param>
+    /// <returns>true if the leave was successful</returns>
+    public virtual bool AttemptLeave(Teams.TeamMember member)
+    {
+        member.team.Leave(member);
+        return true;
     }
 }

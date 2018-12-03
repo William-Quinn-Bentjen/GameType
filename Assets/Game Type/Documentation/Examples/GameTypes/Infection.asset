@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7460caa36723ec4aa6ede9929d3f92a, type: 3}
+  m_Name: Infection
+  m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
+  GameTimerValues:
+    TimeLimit: 0
+    Time: 0.29999998
+  RoundTimerValues:
+    TimeLimit: 0
+    Time: 73.77963
+  CurrentRound: 2
+  InfectedTeam: {fileID: 11400000, guid: 938fdbbc32ac49c48866530c264836bf, type: 2}
+  SurvivorTeam: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
+  startingInfectedPercent: 0.5
+  infectedMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  suicidesInfect: 1
+  teamKilledGetInfected: 0
+  teamKillersGetInfected: 0
+  forceInfectedMesh: 0
+  forceInfectedTeamColor: 1
+  forceSurvivorTeamColor: 1
+  startingScore: 0
+  survivalWorth: 5
+  infectionSpreadWorth: 1
+  infectedKilledWorth: 1
+  teamKillWorth: -1
+  suicideWorth: -1
