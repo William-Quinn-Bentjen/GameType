@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 72520611}
   - component: {fileID: 72520612}
   m_Layer: 0
-  m_Name: Red Team Victim (2)
+  m_Name: Victim 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,14 +236,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 1, b: 0, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 72520614}
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 433286418}
   - component: {fileID: 433286413}
   m_Layer: 0
-  m_Name: Blue Team Killer
+  m_Name: Killer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -617,14 +617,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 8e424e92c3bf3954e820cae92656b79e, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 0, b: 1, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 433286415}
@@ -987,7 +987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &845136293
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1073,7 +1073,7 @@ GameObject:
   - component: {fileID: 1117788845}
   - component: {fileID: 1117788846}
   m_Layer: 0
-  m_Name: Red Team Victim (3)
+  m_Name: Victim 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1105,14 +1105,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 1, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 1117788848}
@@ -1203,7 +1203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1873218373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4368beaf730ae2d4d863361086c15971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameType: {fileID: 11400000, guid: c92e75941a1226b4dba71679a2d475be, type: 2}
+  GameType: {fileID: 11400000, guid: 99f22f6c401fdbb4181894470ce90327, type: 2}
   winUI: {fileID: 751249879}
   players: []
 --- !u!4 &2011657838
@@ -1394,7 +1394,7 @@ GameObject:
   - component: {fileID: 2018860224}
   - component: {fileID: 2018860225}
   m_Layer: 0
-  m_Name: Red Team Victim
+  m_Name: Victim 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,14 +1426,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2018860227}
@@ -1521,7 +1521,7 @@ GameObject:
   - component: {fileID: 2107460057}
   - component: {fileID: 2107460058}
   m_Layer: 0
-  m_Name: Red Team Victim (1)
+  m_Name: Victim 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1553,14 +1553,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 1, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2107460060}

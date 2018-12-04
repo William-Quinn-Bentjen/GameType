@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour {
     }
     public GameType GameType;
     public WinUI winUI;
+    public List<Teams.TeamMember> players = new List<Teams.TeamMember>(); 
     // Use this for initialization
     void Awake()
     {
@@ -49,6 +51,8 @@ public class GameManager : MonoBehaviour {
             if (GameType != null)
             {
                 GameType.GameManager = this;
+                GetPlayers();
+                if (GameType is GameTypes.Interfaces.IPlayers) (GameType as GameTypes.Interfaces.IPlayers).SetPlayers(players);
                 if (GameType.BeginGame())
                 {
                     GameType.StartGame();
@@ -97,5 +101,14 @@ public class GameManager : MonoBehaviour {
         {
             winUI.SetWinnerText(winner);
         }
+    }
+    [ContextMenu("Get Players From Scene")]
+    public void GetPlayers()
+    {
+        players = new List<Teams.TeamMember>(FindObjectsOfType<Teams.TeamMember>());
+    }
+    public static void ReturnToMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

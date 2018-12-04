@@ -14,19 +14,28 @@ MonoBehaviour:
   GameManager: {fileID: 0}
   GameTimerValues:
     TimeLimit: 0
-    Time: 0.29999998
+    Time: 0
   RoundTimerValues:
     TimeLimit: 0
-    Time: 73.77963
-  CurrentRound: 2
+    Time: 612.1479
+  CurrentRound: 1
+  players:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   InfectedTeam: {fileID: 11400000, guid: 938fdbbc32ac49c48866530c264836bf, type: 2}
   SurvivorTeam: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
-  startingInfectedPercent: 0.5
+  startingInfectedPercent: 0
+  useAmount: 1
+  startingInfectedAmount: 0
   infectedMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  survivorMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
   suicidesInfect: 1
   teamKilledGetInfected: 0
   teamKillersGetInfected: 0
-  forceInfectedMesh: 0
+  forceInfectedMesh: 1
   forceInfectedTeamColor: 1
   forceSurvivorTeamColor: 1
   startingScore: 0

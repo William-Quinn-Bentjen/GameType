@@ -190,34 +190,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 25084530}
   m_CullTransparentMesh: 0
---- !u!1 &53137046
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 53137047}
-  m_Layer: 0
-  m_Name: Walk To Target
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &53137047
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 53137046}
-  m_LocalRotation: {x: -0.000083350686, y: 1.1772243e-10, z: -0.00007690862, w: 1}
-  m_LocalPosition: {x: 2.575083, y: 0.9999998, z: 2.7409105}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &72520610
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
@@ -275,6 +247,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 72520614}
+  meshFilter: {fileID: 72520615}
   rb: {fileID: 72520611}
 --- !u!136 &72520613
 CapsuleCollider:
@@ -338,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 72520610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.52, y: 28, z: -1.28}
+  m_LocalPosition: {x: -0.52, y: 20, z: 1.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -510,9 +483,8 @@ GameObject:
   - component: {fileID: 433286414}
   - component: {fileID: 433286418}
   - component: {fileID: 433286413}
-  - component: {fileID: 433286419}
   m_Layer: 0
-  m_Name: Infected
+  m_Name: Survivor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,17 +501,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 938fdbbc32ac49c48866530c264836bf, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0.9433962, g: 0.24474904, b: 0.66220397, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 433286415}
+  meshFilter: {fileID: 433286416}
   rb: {fileID: 433286418}
 --- !u!136 &433286414
 CapsuleCollider:
@@ -603,7 +576,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 433286412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.861, y: 1, z: -7.6}
+  m_LocalPosition: {x: 2.861, y: 20, z: -7.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -624,20 +597,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &433286419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 433286412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc6e003af4498924d9abaed4b77d14af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 53137047}
-  speed: 1.5
-  stopDistance: 0.25
 --- !u!1 &523274271
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &751249878
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1030,7 +989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1041,6 +1000,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 1117788848}
+  meshFilter: {fileID: 1117788849}
   rb: {fileID: 1117788845}
 --- !u!136 &1117788847
 CapsuleCollider:
@@ -1104,7 +1064,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1117788844}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.261, y: 1.02, z: 3.771}
+  m_LocalPosition: {x: 2.261, y: 20, z: 3.771}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1141,7 +1101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29d1543b3cd21f4c942aa95fdef3732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killer: {fileID: 0}
+  killer: {fileID: 2018860225}
   rb: {fileID: 1612767377}
   force: 800
 --- !u!54 &1612767377
@@ -1406,6 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameType: {fileID: 11400000, guid: 5d415fa083090e943881e675c9409c0f, type: 2}
   winUI: {fileID: 751249879}
+  players: []
 --- !u!4 &2011657838
 Transform:
   m_ObjectHideFlags: 0
@@ -1465,7 +1426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1476,6 +1437,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2018860227}
+  meshFilter: {fileID: 2018860228}
   rb: {fileID: 2018860224}
 --- !u!136 &2018860226
 CapsuleCollider:
@@ -1539,7 +1501,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2018860223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.06, y: 100, z: -1.28}
+  m_LocalPosition: {x: -2.06, y: 20, z: -1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1591,7 +1553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 15b6926bbac926f48b5d85a9ca3f4cd2, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
@@ -1602,6 +1564,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2107460060}
+  meshFilter: {fileID: 2107460061}
   rb: {fileID: 2107460057}
 --- !u!136 &2107460059
 CapsuleCollider:

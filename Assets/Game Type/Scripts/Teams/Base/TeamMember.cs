@@ -71,13 +71,10 @@ namespace Teams
             Team teamToBeJoined = teamToJoin ?? team;
             if (teamToBeJoined != null)
             {
-                if (GameManager.Instance.GameType != null)
+                if (team.Join(this))
                 {
-                    if (GameManager.Instance.GameType.AttemptJoin(teamToBeJoined, this))
-                    {
-                        if (OnJoin != null) OnJoin(this);
-                        return true;
-                    }
+                    if (OnJoin != null) OnJoin(this);
+                    return true;
                 }
             }
             return false;

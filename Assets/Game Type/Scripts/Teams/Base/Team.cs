@@ -15,9 +15,11 @@ namespace Teams
         /// List of team members
         /// </summary>
         public List<TeamMember> members = new List<TeamMember>();
-        public delegate void OnSuccessfullMember(TeamMember member);
-        public OnSuccessfullMember OnSuccessfulJoin;
-        public OnSuccessfullMember OnSuccessfulLeave;
+        public delegate void OnSuccessfulMember(TeamMember member);
+        public delegate bool OnAttemptMember(TeamMember member);
+        public OnAttemptMember OnAttemptJoin;
+        public OnSuccessfulMember OnSuccessfulJoin;
+        public OnSuccessfulMember OnSuccessfulLeave;
         /// <summary>
         /// Attempts to join the team
         /// </summary>
@@ -25,22 +27,25 @@ namespace Teams
         /// <returns></returns>
         public virtual bool Join(TeamMember member)
         {
-            //leave old team
-            if (member.team != null && member.team != this)
+            if (OnAttemptJoin != null && OnAttemptJoin(member))
             {
-                member.team.Leave(member);
+                //leave old team
+                if (member.team != null && member.team != this)
+                {
+                    member.team.Leave(member);
+                }
+                //check if was on team members list
+                if (!members.Contains(member))
+                {
+                    members.Add(member);
+                }
+                //join new team
+                member.team = this;
+                //tell delegates it's joining after it's on the member list and has had it's screen changed
+                if (OnSuccessfulJoin != null) OnSuccessfulJoin(member);
+                return true;
             }
-            //check if was on team members list
-            if (!members.Contains(member))
-            {
-                members.Add(member);
-            }
-            //join new team
-            member.team = this;
-            //tell delegates it's joining after it's on the member list and has had it's screen changed
-            if (OnSuccessfulJoin != null) OnSuccessfulJoin(member);
-            return true;
-
+            return false;
         }
         /// <summary>
         /// Leave the team

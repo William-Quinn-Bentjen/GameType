@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 72520611}
   - component: {fileID: 72520612}
   m_Layer: 0
-  m_Name: Red Team Victim (2)
+  m_Name: Victim 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,14 +236,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 1, b: 0, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 72520614}
@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 433286418}
   - component: {fileID: 433286413}
   m_Layer: 0
-  m_Name: Blue Team Killer
+  m_Name: Killer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -617,14 +617,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: 8e424e92c3bf3954e820cae92656b79e, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 0, b: 1, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 433286415}
@@ -970,6 +970,171 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 751249877}
   m_CullTransparentMesh: 0
+--- !u!1 &760921340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 760921343}
+  - component: {fileID: 760921342}
+  - component: {fileID: 760921341}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &760921341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 760921340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 4
+--- !u!65 &760921342
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 760921340}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &760921343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 760921340}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5799999, y: 5.52, z: -0.4499998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &812690855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 812690858}
+  - component: {fileID: 812690857}
+  - component: {fileID: 812690856}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &812690856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 812690855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 1
+--- !u!65 &812690857
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 812690855}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &812690858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 812690855}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.7720504, y: 1.0009999, z: -4.9020367}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &820334003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 820334006}
+  - component: {fileID: 820334005}
+  - component: {fileID: 820334004}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &820334004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 820334003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 2
+--- !u!65 &820334005
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 820334003}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &820334006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 820334003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.12, y: 5.52, z: -9.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &845136292
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +1152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &845136293
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1073,7 +1238,7 @@ GameObject:
   - component: {fileID: 1117788845}
   - component: {fileID: 1117788846}
   m_Layer: 0
-  m_Name: Red Team Victim (3)
+  m_Name: Victim 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1105,14 +1270,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 1, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 1117788848}
@@ -1186,6 +1351,61 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1275321639
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275321642}
+  - component: {fileID: 1275321641}
+  - component: {fileID: 1275321640}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1275321640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1275321639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 0
+--- !u!65 &1275321641
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1275321639}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1275321642
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1275321639}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.7720504, y: 5.52, z: -4.9020367}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1873218372
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1873218373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1364,7 +1584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4368beaf730ae2d4d863361086c15971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameType: {fileID: 11400000, guid: c92e75941a1226b4dba71679a2d475be, type: 2}
+  GameType: {fileID: 11400000, guid: 1494eff865397774dae0b680d4b84588, type: 2}
   winUI: {fileID: 751249879}
   players: []
 --- !u!4 &2011657838
@@ -1394,7 +1614,7 @@ GameObject:
   - component: {fileID: 2018860224}
   - component: {fileID: 2018860225}
   m_Layer: 0
-  m_Name: Red Team Victim
+  m_Name: Victim 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1426,14 +1646,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2018860227}
@@ -1507,6 +1727,116 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2021047219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2021047222}
+  - component: {fileID: 2021047221}
+  - component: {fileID: 2021047220}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2021047220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2021047219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 3
+--- !u!65 &2021047221
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2021047219}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &2021047222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2021047219}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.15, y: 5.52, z: -11.87}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2071962422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071962425}
+  - component: {fileID: 2071962424}
+  - component: {fileID: 2071962423}
+  m_Layer: 0
+  m_Name: Race Check Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2071962423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2071962422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256daa9f1f7854544b52c75619716035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameTypeTag: 4
+  checkPointNumber: 5
+--- !u!65 &2071962424
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2071962422}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &2071962425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2071962422}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.36, y: 5.52, z: -2.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2107460056
 GameObject:
   m_ObjectHideFlags: 0
@@ -1521,7 +1851,7 @@ GameObject:
   - component: {fileID: 2107460057}
   - component: {fileID: 2107460058}
   m_Layer: 0
-  m_Name: Red Team Victim (1)
+  m_Name: Victim 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1553,14 +1883,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11eacd4cb46ea8c439d7f2c5f0ee3bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: {fileID: 11400000, guid: bd469d80a55dd8841a4ba4c24a08d1fc, type: 2}
+  team: {fileID: 0}
   joinOn:
     Awake: 1
     Enable: 0
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 1, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2107460060}

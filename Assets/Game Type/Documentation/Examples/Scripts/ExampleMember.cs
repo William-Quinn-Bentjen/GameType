@@ -7,11 +7,13 @@ public class ExampleMember : Teams.TeamMember {
     public float deathAtImpact = 10;
     public bool alive = true;
     public MeshRenderer meshRenderer;
+    public MeshFilter meshFilter;
     public Rigidbody rb;
     public delegate void MemberOtherDelegate(Teams.TeamMember member, Teams.TeamMember other);
     public MemberOtherDelegate OnDeath;
     private void Reset()
     {
+        meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
     }
@@ -24,11 +26,18 @@ public class ExampleMember : Teams.TeamMember {
             meshRenderer.material.color = personalColor;
         }
         rb = GetComponent<Rigidbody>();
+        if (GameManager.Instance.GameType is ExampleGameTypeIntegration)
+        {
+            OnDeath = null;
+            OnDeath += (GameManager.Instance.GameType as ExampleGameTypeIntegration).EvaluateDeath;
+        }
         base.Awake();
     }
     public void Death(Teams.TeamMember killer = null)
     {
-        if (OnDeath!= null)OnDeath(this, killer);
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        OnDeath?.Invoke(this, killer);
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -58,7 +67,7 @@ public class ExampleMember : Teams.TeamMember {
             {
                 if (GameManager.Instance.GameType.AttemptJoin(teamToBeJoined, this))
                 {
-                    if (OnJoin != null) OnJoin(this);
+                    OnJoin?.Invoke(this);
                     return true;
                 }
             }

@@ -44,26 +44,30 @@ public class ExtendedGameType : GameType
     // Called before StartGame
     public override void EnterMap()
     {
-        if (GameState.States.ContainsKey(ExampleGameState.EnteringMap)) GameState.StateChange(ExampleGameState.EnteringMap);
+        GameState.ChangeState(ExampleGameState.EnteringMap);
     }
     // Called at the begining of gameplay after the everthing is ready 
     public override void StartGame()
     {
-        if (GameState.States.ContainsKey(ExampleGameState.Starting)) GameState.StateChange(ExampleGameState.Starting);
-        if (GameState.States.ContainsKey(ExampleGameState.InProgress)) GameState.StateChange(ExampleGameState.InProgress);
+        CurrentRound = 0;
+        GameState.ChangeState(ExampleGameState.Starting);
+        GameManager.StartCoroutine(GameTimer());
         StartRound();
     }
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
     public override void EndGame()
     {
-        base.EndGame();
-        if (GameState.States.ContainsKey(ExampleGameState.InProgress)) GameState.StateChange(ExampleGameState.Ending);
+        if (GameState.Key == ExampleGameState.InProgress)
+        {
+            GameState.ChangeState(ExampleGameState.Ending);
+            GameManager.StopCoroutine(GameTimer());
+        }
     }
     // Called after the game has ended and is the very last thing the gamemode does
     public override void LeaveMap()
     {
-        if (GameState.States.ContainsKey(ExampleGameState.LeavingMap)) GameState.StateChange(ExampleGameState.LeavingMap);
+        GameState.ChangeState(ExampleGameState.LeavingMap);
     }
     // Game timer (this is basically the tick function for GameTime)
     public override IEnumerator GameTimer()
@@ -116,17 +120,17 @@ public class ExtendedGameType : GameType
     }
 
     //rounds
-    public TimerProperties RoundTimerValues = new TimerProperties();
+    public TimerValues RoundTimerValues = new TimerValues();
+    [Header("Read Only")]
     public int CurrentRound = 0;
 
     public virtual void EndRound()
     {
-        GameManager.StopCoroutine(GameTimer());
         GameManager.StopCoroutine(RoundTimer());
     }
     public virtual void StartRound()
     {
-        GameManager.StartCoroutine(GameTimer());
+        GameState.ChangeStateIf(ExampleGameState.Starting, ExampleGameState.InProgress);
         GameManager.StartCoroutine(RoundTimer());
         CurrentRound++;
     }
@@ -228,7 +232,7 @@ public class ExtendedGameType : GameType
             {
                 if (_currentState == oldState)
                 {
-                    StateChange(newState, false, ignoreOnEndIfCurrent);
+                    ChangeState(newState, false, ignoreOnEndIfCurrent);
                 }
                 States.Remove(oldState.Key);
             }
@@ -237,7 +241,7 @@ public class ExtendedGameType : GameType
         /// Use to chage between states
         /// </summary>
         /// <param name="newState">The state you wish to chage to</param>
-        public void StateChange(State newState, bool ignoreOnStart = false, bool ignoreOnEnd = false)
+        public void ChangeState(State newState, bool ignoreOnStart = false, bool ignoreOnEnd = false)
         {
             if (_currentState != null && newState != null)
             {
@@ -251,12 +255,30 @@ public class ExtendedGameType : GameType
                 if (ignoreOnEnd == false && _currentState.OnStart != null) _currentState.OnStart(oldState, _currentState);
             }
         }
-        public void StateChange(T newStateKey, bool ignoreOnStart = false, bool ignoreOnEnd = false)
+        public void ChangeState(T newStateKey, bool ignoreOnStart = false, bool ignoreOnEnd = false)
         {
             if (States.ContainsKey(newStateKey))
             {
-                StateChange(States[newStateKey], ignoreOnStart, ignoreOnEnd);
+                ChangeState(States[newStateKey], ignoreOnStart, ignoreOnEnd);
             }
+        }
+        public bool ChangeStateIf(State currentState, State newState)
+        {
+            if (_currentState == currentState)
+            {
+                ChangeState(newState);
+                return true;
+            }
+            return false;
+        }
+        public bool ChangeStateIf(T currentState, T newState)
+        {
+            if (States.ContainsKey(currentState))
+            {
+                ChangeState(newState);
+                return true;
+            }
+            return false;
         }
         /// <summary>
         /// A state with on start and on end as well as a key

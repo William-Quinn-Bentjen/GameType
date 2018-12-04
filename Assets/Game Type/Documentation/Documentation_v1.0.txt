@@ -12,9 +12,11 @@ ExtGameType
 		StartRound
 		EndRound
 Integration
+	interfaces
 	fill in attempt join
 	evaluate death
 	win conditions?
 	join effects?
 GameType(Slayer, Infection)
 	everything else
+	override interface for FFA and whatever

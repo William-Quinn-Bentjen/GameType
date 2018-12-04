@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExampleGameTypeIntegration : ExtendedGameType
+
+public class ExampleGameTypeIntegration : ExtendedGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
 {
+    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
     public override bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
     {
         if (base.AttemptJoin(team, member))
@@ -41,6 +43,10 @@ public class ExampleGameTypeIntegration : ExtendedGameType
     {
 
     }
+    public virtual void EvaluateRoundEndCondition(Teams.Team team)
+    {
+
+    }
     public virtual void SetWinnerText(Teams.Team team)
     {
         // could be better but it works
@@ -49,5 +55,19 @@ public class ExampleGameTypeIntegration : ExtendedGameType
         {
             gm.SetWinnerText(team);
         }
+    }
+    public virtual List<Teams.TeamMember> GetPlayers()
+    {
+        return players;
+    }
+
+    public virtual void SetPlayers(List<Teams.TeamMember> playersList)
+    {
+        players = playersList;
+    }
+
+    public virtual bool IsFFA()
+    {
+        return false;
     }
 }

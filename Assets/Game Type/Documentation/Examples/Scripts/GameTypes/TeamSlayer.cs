@@ -4,10 +4,8 @@ using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "TeamSlayer", menuName = "GameType/Example/TeamSlayer")]
 public class TeamSlayer : ExampleGameTypeIntegration {
-    [Space(10)]
     [Header("Game Settings")]
     public bool forceTeamColor = true;
-    [Space(10)]
     [Header("Scoreing Settings")]
     public int killsToWin = 10;
     public int startingScore = 0;
@@ -32,7 +30,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
         if (GameState.CurrentState.Key == ExampleGameState.InProgress)
         {
             GameManager.StopCoroutine(GameTimer());
-            GameState.StateChange(ExampleGameState.Ending);
+            GameState.ChangeState(ExampleGameState.Ending);
             Debug.Log("GameOver");
         }
         

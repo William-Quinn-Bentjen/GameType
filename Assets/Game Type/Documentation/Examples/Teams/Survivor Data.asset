@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Survivor Data
   m_EditorClassIdentifier: 
   TeamName: Survivors
-  TeamColor: {r: 0, g: 0.779325, b: 1, a: 0}
+  TeamColor: {r: 0, g: 0.779325, b: 1, a: 1}
