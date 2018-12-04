@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour {
                 GameType.GameManager = this;
                 GetPlayers();
                 if (GameType is GameTypes.Interfaces.IPlayers) (GameType as GameTypes.Interfaces.IPlayers).SetPlayers(players);
-                if (GameType.)
                 if (GameType.BeginGame())
                 {
                     GameType.StartGame();

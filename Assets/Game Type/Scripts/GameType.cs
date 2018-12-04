@@ -11,7 +11,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public MonoBehaviour GameManager;
     [System.Serializable]
-    public struct TimerProperties
+    public struct TimerValues
     {
         /// <summary>
         /// The total duration in seconds (0 is no limit)
@@ -22,7 +22,7 @@ public class GameType : ScriptableObject {
         /// </summary>
         public float Time;
     }
-    public TimerProperties GameTimerValues = new TimerProperties();
+    public TimerValues GameTimerValues = new TimerValues();
 
 
     // Used to give the gametype info when it's created

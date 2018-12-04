@@ -120,7 +120,8 @@ public class ExtendedGameType : GameType
     }
 
     //rounds
-    public TimerProperties RoundTimerValues = new TimerProperties();
+    public TimerValues RoundTimerValues = new TimerValues();
+    [Header("Read Only")]
     public int CurrentRound = 0;
 
     public virtual void EndRound()

@@ -247,6 +247,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 72520614}
+  meshFilter: {fileID: 0}
   rb: {fileID: 72520611}
 --- !u!136 &72520613
 CapsuleCollider:
@@ -580,7 +581,7 @@ Transform:
   m_GameObject: {fileID: 403547428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -627,6 +628,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 433286415}
+  meshFilter: {fileID: 0}
   rb: {fileID: 433286418}
 --- !u!136 &433286414
 CapsuleCollider:
@@ -1114,6 +1116,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 1117788848}
+  meshFilter: {fileID: 0}
   rb: {fileID: 1117788845}
 --- !u!136 &1117788847
 CapsuleCollider:
@@ -1363,6 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameType: {fileID: 11400000, guid: c92e75941a1226b4dba71679a2d475be, type: 2}
   winUI: {fileID: 751249879}
+  players: []
 --- !u!4 &2011657838
 Transform:
   m_ObjectHideFlags: 0
@@ -1433,6 +1437,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2018860227}
+  meshFilter: {fileID: 0}
   rb: {fileID: 2018860224}
 --- !u!136 &2018860226
 CapsuleCollider:
@@ -1559,6 +1564,7 @@ MonoBehaviour:
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2107460060}
+  meshFilter: {fileID: 0}
   rb: {fileID: 2107460057}
 --- !u!136 &2107460059
 CapsuleCollider:

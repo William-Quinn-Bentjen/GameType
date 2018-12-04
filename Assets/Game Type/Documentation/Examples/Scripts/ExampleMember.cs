@@ -7,11 +7,13 @@ public class ExampleMember : Teams.TeamMember {
     public float deathAtImpact = 10;
     public bool alive = true;
     public MeshRenderer meshRenderer;
+    public MeshFilter meshFilter;
     public Rigidbody rb;
     public delegate void MemberOtherDelegate(Teams.TeamMember member, Teams.TeamMember other);
     public MemberOtherDelegate OnDeath;
     private void Reset()
     {
+        meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
     }

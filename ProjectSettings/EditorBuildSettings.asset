@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game Type/Documentation/Examples/Scenes/Team Slayer.unity
     guid: 7ee3cf33733453d43b0818842f7892cb
+  - enabled: 1
+    path: Assets/Game Type/Documentation/Examples/Scenes/FFA Slayer.unity
+    guid: c6424d828174e1045ac0222d1f1d63ba
+  - enabled: 1
+    path: Assets/Game Type/Documentation/Examples/Scenes/Infection.unity
+    guid: 190a44696c81f3e46b1a0f757449162c
   m_configObjects: {}

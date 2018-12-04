@@ -14,8 +14,13 @@ public class Infection : ExampleGameTypeIntegration
     [Header("Game Settings")]
     [Range(0, .99f)]
     public float startingInfectedPercent = 0.5f;
+    [Tooltip("Enable if you wanted 1 zombie instead of 1% at the start")]
+    public bool useAmount = false;
+    [Range(0, 999999)]
+    public int startingInfectedAmount = 1;
     //public int startingNumberOfInfected
     public Mesh infectedMesh;
+    public Mesh survivorMesh;
 
     public bool suicidesInfect = true;
     public bool teamKilledGetInfected = false;
@@ -38,7 +43,11 @@ public class Infection : ExampleGameTypeIntegration
     public int suicideWorth = -1;
     public Dictionary<Teams.TeamMember, float> score = new Dictionary<Teams.TeamMember, float>();
 
-
+    public override void StartRound()
+    {
+        AssignTeams();
+        base.StartRound();
+    }
     public override bool IsFFA()
     {
         return true;
@@ -51,12 +60,10 @@ public class Infection : ExampleGameTypeIntegration
     }
     public override bool CanStart()
     {
-        if (InfectedTeam != null && SurvivorTeam != null)
+        if (InfectedTeam != null && SurvivorTeam != null && players.Count > 1) 
         {
-            HookUpTeams();
             return true;
         }
-        Debug.LogWarning("Survivor or Infected team not assigned");
         return false;
     }
     public override bool BeginGame()
@@ -109,11 +116,7 @@ public class Infection : ExampleGameTypeIntegration
             //remove later?
             exampleMember.OnDeath = null;
             exampleMember.OnDeath += EvaluateDeath;
-            if (exampleMember.GetComponent<ExampleInfectedMember>() == null)
-            {
-                // infect the member
-                Infect(exampleMember);
-            }
+            Infect(exampleMember);
         }
     }
     public override void MemberJoinEffect(Teams.TeamMember member)
@@ -121,10 +124,10 @@ public class Infection : ExampleGameTypeIntegration
         ExampleMember exampleMember = member.GetComponent<ExampleMember>();
         if (exampleMember != null)
         {
-            if (forceSurvivorTeamColor) exampleMember.meshRenderer.material.color = exampleMember.personalColor;
             //remove later?
             exampleMember.OnDeath = null;
             exampleMember.OnDeath += EvaluateDeath;
+            Disinfect(exampleMember);
         }
     }
     public override void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
@@ -191,31 +194,29 @@ public class Infection : ExampleGameTypeIntegration
                 }
             }
         }
-        if (killer != null && killer.team != null)
+        EvaluateWinCondition(dead.team);
+    }
+    public virtual void Disinfect(ExampleMember member)
+    {
+        if (forceSurvivorTeamColor) member.meshRenderer.material.color = member.personalColor;
+        if (forceInfectedMesh) member.meshFilter.mesh = survivorMesh;
+        InfectedTeam.members.Remove(member);
+        if (!SurvivorTeam.members.Contains(member))
         {
-            EvaluateWinCondition(killer.team);
+            SurvivorTeam.members.Add(member);
         }
+        member.team = SurvivorTeam;
     }
     public virtual void Infect(ExampleMember member)
     {
-        if (member.team == SurvivorTeam)
+        if (forceInfectedMesh) member.meshFilter.mesh = infectedMesh;
+        if (forceInfectedTeamColor) member.meshRenderer.material.color = InfectedTeam.data.TeamColor;
+        SurvivorTeam.members.Remove(member);
+        if (!InfectedTeam.members.Contains(member))
         {
-            GameObject obj = new GameObject("Infected " + member.name);
-            obj.transform.position = member.transform.position;
-            obj.transform.rotation = member.transform.rotation;
-            obj.transform.localScale = member.transform.localScale;
-            obj.AddComponent<MeshRenderer>();
-            if (forceInfectedMesh) obj.AddComponent<MeshFilter>().mesh = infectedMesh;
-            obj.AddComponent<MeshCollider>().convex = true;
-            obj.AddComponent<Rigidbody>();
-            ExampleInfectedMember example = obj.AddComponent<ExampleInfectedMember>();
-            if (forceInfectedTeamColor) example.meshRenderer.material.color = InfectedTeam.data.TeamColor;
-            example.team = InfectedTeam;
-            SurvivorTeam.members.Remove(member);
-            InfectedTeam.members.Add(example);
-            //InfectedTeam.Join(example);
-            Destroy(member.gameObject);
+            InfectedTeam.members.Add(member);
         }
+        member.team = InfectedTeam;
     }
     public override void EvaluateWinCondition(Teams.Team team)
     {
@@ -225,10 +226,13 @@ public class Infection : ExampleGameTypeIntegration
             {
                 EndGame();
             }
+            if (InfectedTeam.members.Count <= 0)
+            {
+                EndGame();
+            }
         }
     }
-
-    int Rounds = 1;
+    
     //int CurrentRound = 0;
 
     public virtual void RoundEnd()
@@ -239,14 +243,12 @@ public class Infection : ExampleGameTypeIntegration
     {
 
     }
-    [ContextMenu("Assign team's delegates")]
     public virtual void HookUpTeams()
     {
         if (InfectedTeam != null)
         {
             InfectedTeam.OnSuccessfulJoin = null;
             InfectedTeam.OnSuccessfulJoin += InfectedMemberJoinEffect;
-            InfectedTeam.OnSuccessfulJoin += MemberJoinEffect;
             InfectedTeam.OnAttemptJoin = null;
             InfectedTeam.OnAttemptJoin += AttemptJoin;
         }
@@ -256,6 +258,82 @@ public class Infection : ExampleGameTypeIntegration
             SurvivorTeam.OnSuccessfulJoin += MemberJoinEffect;
             SurvivorTeam.OnAttemptJoin = null;
             SurvivorTeam.OnAttemptJoin = AttemptJoin;
+        }
+        AssignTeams();
+    }
+    public void AssignTeams()
+    {
+        if (players.Count > 1)
+        {
+            List<Teams.TeamMember> unassignedPlayers = new List<TeamMember>(players.ToArray());
+            if (useAmount)
+            {
+                if (startingInfectedAmount < players.Count)
+                {
+                    for (int i = 0; i < startingInfectedAmount; i++)
+                    {
+                        int removeAt = Random.Range(0, unassignedPlayers.Count - 1);
+                        InfectedTeam.Join(unassignedPlayers[removeAt]);
+                        unassignedPlayers.RemoveAt(removeAt);
+                    }
+                    for(int i = 0; i < unassignedPlayers.Count; i++)
+                    {
+                        SurvivorTeam.Join(unassignedPlayers[i]);
+                    }
+                }
+                else
+                {
+                    int removeAt = Random.Range(0, unassignedPlayers.Count - 1);
+                    SurvivorTeam.Join(unassignedPlayers[removeAt]);
+                    unassignedPlayers.RemoveAt(removeAt);
+                    for(int i = 0; i < unassignedPlayers.Count; i++)
+                    {
+                        InfectedTeam.Join(unassignedPlayers[i]);
+                    }
+                }
+            }
+            else
+            {
+                int infectedAmount = Mathf.FloorToInt(startingInfectedPercent * unassignedPlayers.Count);
+                if (infectedAmount != 0)
+                {
+                    if (infectedAmount < players.Count)
+                    {
+                        for (int i = 0; i < infectedAmount; i++)
+                        {
+                            int removeAt = Random.Range(0, unassignedPlayers.Count - 1);
+                            InfectedTeam.Join(unassignedPlayers[removeAt]);
+                            unassignedPlayers.RemoveAt(removeAt);
+                        }
+                        for (int i = 0; i < unassignedPlayers.Count; i++)
+                        {
+                            SurvivorTeam.Join(unassignedPlayers[i]);
+                        }
+                    }
+                    else
+                    {
+                        int removeAt = Random.Range(0, unassignedPlayers.Count - 1);
+                        SurvivorTeam.Join(unassignedPlayers[removeAt]);
+                        unassignedPlayers.RemoveAt(removeAt);
+                        for (int i = 0; i < unassignedPlayers.Count; i++)
+                        {
+                            InfectedTeam.Join(unassignedPlayers[i]);
+                        }
+                    }
+
+                }
+                else
+                {
+                    for (int i = 0; i < unassignedPlayers.Count; i++)
+                    {
+                        SurvivorTeam.Join(unassignedPlayers[i]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("not enough players, no zombies will be spawned");
         }
     }
     public bool AttemptJoin(TeamMember member)

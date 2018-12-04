@@ -17,17 +17,12 @@ MonoBehaviour:
     Time: 0
   RoundTimerValues:
     TimeLimit: 0
-    Time: 242.05489
+    Time: 286.91403
   CurrentRound: 1
+  players: []
   forceColor: 0
   forcedColor: {r: 1, g: 0, b: 0, a: 1}
-  killsToWin: 1
+  killsToWin: 3
   startingScore: 0
   killWorth: 1
   suicideWorth: -1
-  players:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
