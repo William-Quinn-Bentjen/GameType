@@ -57,8 +57,8 @@ public class ExtendedGameType : GameType
     // (things like score can be sent off or saved before players should load to the end screen)
     public override void EndGame()
     {
-        base.EndGame();
         if (GameState.States.ContainsKey(ExampleGameState.InProgress)) GameState.StateChange(ExampleGameState.Ending);
+        base.EndGame();
     }
     // Called after the game has ended and is the very last thing the gamemode does
     public override void LeaveMap()
@@ -121,7 +121,6 @@ public class ExtendedGameType : GameType
 
     public virtual void EndRound()
     {
-        GameManager.StopCoroutine(GameTimer());
         GameManager.StopCoroutine(RoundTimer());
     }
     public virtual void StartRound()

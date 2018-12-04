@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Teams;
 using UnityEngine;
@@ -106,8 +106,11 @@ public class Infection : ExampleGameTypeIntegration
             //remove later?
             exampleMember.OnDeath = null;
             exampleMember.OnDeath += EvaluateDeath;
-            // infect the member
-            Infect(exampleMember);
+            if (exampleMember.GetComponent<ExampleInfectedMember>() == null)
+            {
+                // infect the member
+                Infect(exampleMember);
+            }
         }
     }
     public override void MemberJoinEffect(Teams.TeamMember member)
@@ -130,7 +133,6 @@ public class Infection : ExampleGameTypeIntegration
         if (member != null && !score.ContainsKey(member))
         {
             score.Add(member, startingScore);
-            
         }
     }
     public override void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
@@ -142,7 +144,7 @@ public class Infection : ExampleGameTypeIntegration
             {
                 EnsureExistance(dead.team, dead);
                 score[dead] += suicideWorth;
-                Debug.Log("Suicide " + dead.gameObject.name);
+                Debug.Log("Suicide " + dead.gameObject.name + dead.gameObject.GetComponent<Rigidbody>().velocity);
                 if (suicidesInfect && dead.team == SurvivorTeam)
                 {
                     // Infect
@@ -193,16 +195,24 @@ public class Infection : ExampleGameTypeIntegration
     }
     public virtual void Infect(ExampleMember member)
     {
-        if (member as ExampleInfectedMember == false)
+        if (member.team == SurvivorTeam)
         {
-            if (forceInfectedMesh) member.GetComponent<MeshFilter>().mesh = infectedMesh;
-            if (forceInfectedTeamColor) member.meshRenderer.material.color = InfectedTeam.data.TeamColor;
-            ExampleInfectedMember example = member.gameObject.AddComponent<ExampleInfectedMember>();
-            InfectedTeam.Join(example);
-            if (member as ExampleInfectedMember != true) Destroy(member);
+            GameObject obj = new GameObject("Infected " + member.name);
+            obj.transform.position = member.transform.position;
+            obj.transform.rotation = member.transform.rotation;
+            obj.transform.localScale = member.transform.localScale;
+            obj.AddComponent<MeshRenderer>();
+            if (forceInfectedMesh) obj.AddComponent<MeshFilter>().mesh = infectedMesh;
+            obj.AddComponent<MeshCollider>().convex = true;
+            obj.AddComponent<Rigidbody>();
+            ExampleInfectedMember example = obj.AddComponent<ExampleInfectedMember>();
+            if (forceInfectedTeamColor) example.meshRenderer.material.color = InfectedTeam.data.TeamColor;
+            example.team = InfectedTeam;
+            SurvivorTeam.members.Remove(member);
+            InfectedTeam.members.Add(example);
+            //InfectedTeam.Join(example);
+            Destroy(member.gameObject);
         }
-        
-
     }
     public override void EvaluateWinCondition(Teams.Team team)
     {

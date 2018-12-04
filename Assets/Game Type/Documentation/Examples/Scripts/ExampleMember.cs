@@ -26,13 +26,16 @@ public class ExampleMember : Teams.TeamMember {
         rb = GetComponent<Rigidbody>();
         if (GameManager.Instance.GameType is ExampleGameTypeIntegration)
         {
+            OnDeath = null;
             OnDeath += (GameManager.Instance.GameType as ExampleGameTypeIntegration).EvaluateDeath;
         }
         base.Awake();
     }
     public void Death(Teams.TeamMember killer = null)
     {
-        if (OnDeath!= null)OnDeath(this, killer);
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        OnDeath?.Invoke(this, killer);
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -62,7 +65,7 @@ public class ExampleMember : Teams.TeamMember {
             {
                 if (GameManager.Instance.GameType.AttemptJoin(teamToBeJoined, this))
                 {
-                    if (OnJoin != null) OnJoin(this);
+                    OnJoin?.Invoke(this);
                     return true;
                 }
             }
