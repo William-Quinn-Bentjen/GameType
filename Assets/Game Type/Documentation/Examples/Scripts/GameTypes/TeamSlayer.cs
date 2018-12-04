@@ -32,7 +32,7 @@ public class TeamSlayer : ExampleGameTypeIntegration {
         if (GameState.CurrentState.Key == ExampleGameState.InProgress)
         {
             GameManager.StopCoroutine(GameTimer());
-            GameState.StateChange(ExampleGameState.Ending);
+            GameState.ChangeState(ExampleGameState.Ending);
             Debug.Log("GameOver");
         }
         

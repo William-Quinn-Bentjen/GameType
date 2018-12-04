@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameTypes.Interfaces;
+using Teams;
 using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "FFA Slayer", menuName = "GameType/Example/FFA Slayer")]
@@ -15,17 +17,50 @@ public class FFASlayer : ExampleGameTypeIntegration {
     public int killWorth = 1;
     public int suicideWorth = -1;
     public Dictionary<Teams.TeamMember, float> score = new Dictionary<Teams.TeamMember, float>();
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-    
+    public override bool IsFFA()
+    {
+        return true;
+    }
 
-	// Use this for initialization
+
+    // Use this for initialization
     public override void OnEnable()
     {
         base.OnEnable();
         score = new Dictionary<Teams.TeamMember, float>();
         players = new List<Teams.TeamMember>();
     }
-
+    public override bool BeginGame()
+    {
+        ResetScoreboard();
+        if (base.BeginGame())
+        {
+            StartGame();
+            return true;
+        }
+        return false;
+    }
+    public void ResetScoreboard()
+    {
+        score.Clear();
+        players = new List<Teams.TeamMember>(FindObjectsOfType<Teams.TeamMember>());
+        foreach (Teams.TeamMember player in players)
+        {
+            if (!score.ContainsKey(player))
+            {
+                score.Add(player, startingScore);
+                MemberJoinEffect(player);
+            }
+        }
+    }
+    public override bool CanStart()
+    {
+        if (base.CanStart() && players.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
     public override void EndGame()
@@ -33,7 +68,7 @@ public class FFASlayer : ExampleGameTypeIntegration {
         if (GameState.CurrentState.Key == ExampleGameState.InProgress)
         {
             GameManager.StopCoroutine(GameTimer());
-            GameState.StateChange(ExampleGameState.Ending);
+            GameState.ChangeState(ExampleGameState.Ending);
             Debug.Log("GameOver");
         }
         
@@ -43,7 +78,7 @@ public class FFASlayer : ExampleGameTypeIntegration {
         ExampleMember exampleMember = member.GetComponent<ExampleMember>();
         if (exampleMember != null)
         {
-            
+            if (forceColor) exampleMember.meshRenderer.material.color = forcedColor;
             //remove later?
             exampleMember.OnDeath = null;
             exampleMember.OnDeath += EvaluateDeath;
@@ -53,7 +88,7 @@ public class FFASlayer : ExampleGameTypeIntegration {
     {
         if (!score.ContainsKey(member))
         {
-            if (forceColor) member.GetComponent<ExampleMember>().meshRenderer.material.color = forcedColor;
+            MemberJoinEffect(member);
             score.Add(member, startingScore);
         }
     }
@@ -86,8 +121,11 @@ public class FFASlayer : ExampleGameTypeIntegration {
             if (score[member] >= killsToWin)
             {
                 Debug.Log("Winner team: " + member.name);
+                SetWinnerText(new Teams.Team() { data = new Teams.TeamData() { TeamName = member.name, TeamColor = (member as ExampleMember).personalColor } });
                 EndGame();
             }
         }
     }
+
+
 }

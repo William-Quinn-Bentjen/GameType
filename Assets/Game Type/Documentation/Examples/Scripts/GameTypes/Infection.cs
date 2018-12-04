@@ -39,7 +39,10 @@ public class Infection : ExampleGameTypeIntegration
     public Dictionary<Teams.TeamMember, float> score = new Dictionary<Teams.TeamMember, float>();
 
 
-
+    public override bool IsFFA()
+    {
+        return true;
+    }
     // Use this for initialization
     public override void OnEnable()
     {

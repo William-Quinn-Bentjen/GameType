@@ -243,7 +243,7 @@ MonoBehaviour:
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 1, b: 0, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 72520614}
@@ -623,7 +623,7 @@ MonoBehaviour:
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 0, b: 1, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 433286415}
@@ -1110,7 +1110,7 @@ MonoBehaviour:
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 1, a: 0}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 1117788848}
@@ -1429,7 +1429,7 @@ MonoBehaviour:
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 1, g: 0, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2018860227}
@@ -1555,7 +1555,7 @@ MonoBehaviour:
   leaveOn:
     Destory: 0
     Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
+  personalColor: {r: 0, g: 1, b: 0, a: 1}
   deathAtImpact: 10
   alive: 1
   meshRenderer: {fileID: 2107460060}
