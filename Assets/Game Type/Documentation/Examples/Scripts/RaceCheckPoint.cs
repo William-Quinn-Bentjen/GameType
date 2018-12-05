@@ -5,11 +5,17 @@ using UnityEngine;
 public class RaceCheckPoint : GameTypeSpecificObject {
     [Range(0, 999999)]
     public int checkPointNumber = 0;
-    public delegate void ColliderTouched(Collision collision);
+    public delegate void ColliderTouched(Collision collision, int checkPointNumber);
+    public delegate void ColliderTriggered(Collider other, int checkPointNumber);
     public ColliderTouched onTouched;
+    public ColliderTriggered onTriggered;
+    private void OnTriggerEnter(Collider other)
+    {
+        onTriggered?.Invoke(other, checkPointNumber);
+    }
     private void OnCollisionEnter(Collision collision)
     {
-        onTouched?.Invoke(collision);
+        onTouched?.Invoke(collision, checkPointNumber);
     }
     private void Reset()
     {

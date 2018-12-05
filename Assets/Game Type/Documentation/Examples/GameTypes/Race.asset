@@ -17,10 +17,9 @@ MonoBehaviour:
     Time: 0
   RoundTimerValues:
     TimeLimit: 0
-    Time: 6.5399947
+    Time: 13.240113
   CurrentRound: 1
   players:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
