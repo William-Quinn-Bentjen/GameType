@@ -22,7 +22,7 @@ public class GameType : ScriptableObject {
         /// </summary>
         public float Time;
     }
-    public TimerValues GameTimerValues = new TimerValues();
+    public TimerValues GameTimer = new TimerValues();
 
 
     // Used to give the gametype info when it's created
@@ -34,17 +34,17 @@ public class GameType : ScriptableObject {
     /// Game timer (this is basically the tick function for GameTime)
     /// </summary>
     /// <returns></returns>
-    public virtual IEnumerator GameTimer()
+    public virtual IEnumerator GameTimerFunction()
     {
         // Set the game time to 0 because the timer just started
-        GameTimerValues.Time = 0;
+        GameTimer.Time = 0;
         // 0 for no limit
-        if (GameTimerValues.TimeLimit != 0)
+        if (GameTimer.TimeLimit != 0)
         {
             // Actual timer logic
-            while (GameTimerValues.Time < GameTimerValues.TimeLimit)
+            while (GameTimer.Time < GameTimer.TimeLimit)
             {
-                GameTimerValues.Time += Time.deltaTime;
+                GameTimer.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
             // End the game 
@@ -55,7 +55,7 @@ public class GameType : ScriptableObject {
             // Count until the game ends
             while (true)
             {
-                GameTimerValues.Time += Time.deltaTime;
+                GameTimer.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }
@@ -89,7 +89,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void StartGame()
     {
-        GameManager.StartCoroutine(GameTimer());
+        GameManager.StartCoroutine(GameTimerFunction());
     }
     /// <summary>
     /// Called at the end of gameplay
@@ -97,7 +97,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void EndGame()
     {
-        GameManager.StopCoroutine(GameTimer());
+        GameManager.StopCoroutine(GameTimerFunction());
     }
     /// <summary>
     /// Called after the game has ended and is the very last thing the gamemode does

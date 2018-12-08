@@ -10,9 +10,15 @@ namespace GameTypes
             List<Teams.TeamMember> GetPlayers();
             void SetPlayers(List<Teams.TeamMember> playersList);
         }
+        public interface ITeams
+        {
+            List<Teams.Team> GetTeams();
+            List<Teams.Team> SetTeams(List<Teams.Team> teams);
+        }
         public interface IFFA
         {
             bool IsFFA();
         }
+
     }
 }

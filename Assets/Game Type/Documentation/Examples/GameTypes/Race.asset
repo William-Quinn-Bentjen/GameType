@@ -12,16 +12,20 @@ MonoBehaviour:
   m_Name: Race
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
-  GameTimerValues:
+  GameTimer:
     TimeLimit: 0
-    Time: 0
-  RoundTimerValues:
-    TimeLimit: 0
-    Time: 13.240113
-  CurrentRound: 1
+    Time: 17.92022
   players:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  finishedRacers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   laps: 1
+  raceEndConditions: 2
+  withinSeconds: 1
+  withinTimer: 1.0199996

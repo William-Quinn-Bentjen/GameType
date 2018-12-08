@@ -49,10 +49,9 @@ public class ExtendedGameType : GameType
     // Called at the begining of gameplay after the everthing is ready 
     public override void StartGame()
     {
-        CurrentRound = 0;
         GameState.ChangeState(ExampleGameState.Starting);
-        GameManager.StartCoroutine(GameTimer());
-        StartRound();
+        GameState.ChangeState(ExampleGameState.InProgress);
+        GameManager.StartCoroutine(GameTimerFunction());
     }
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
@@ -61,7 +60,7 @@ public class ExtendedGameType : GameType
         if (GameState.Key == ExampleGameState.InProgress)
         {
             GameState.ChangeState(ExampleGameState.Ending);
-            GameManager.StopCoroutine(GameTimer());
+            GameManager.StopCoroutine(GameTimerFunction());
         }
     }
     // Called after the game has ended and is the very last thing the gamemode does
@@ -70,73 +69,31 @@ public class ExtendedGameType : GameType
         GameState.ChangeState(ExampleGameState.LeavingMap);
     }
     // Game timer (this is basically the tick function for GameTime)
-    public override IEnumerator GameTimer()
+    public override IEnumerator GameTimerFunction()
     {
         // Set the game time to 0 because the timer just started
-        GameTimerValues.Time = 0;
+        GameTimer.Time = 0;
         // 0 for no limit
-        if (GameTimerValues.TimeLimit <= 0)
+        if (GameTimer.TimeLimit <= 0)
         {
             // Count until the game ends
             while (GameState.Key == ExampleGameState.InProgress)
             {
-                GameTimerValues.Time += Time.deltaTime;
+                GameTimer.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
         }
         else
         {
             // Actual timer logic
-            while (GameTimerValues.Time < GameTimerValues.TimeLimit)
+            while (GameTimer.Time < GameTimer.TimeLimit)
             {
-                GameTimerValues.Time += Time.deltaTime;
+                GameTimer.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
-            if (GameState.Key == ExampleGameState.InProgress)
-            {   // End the game 
-                EndGame();
-            }
+            if (GameState.Key == ExampleGameState.InProgress) EndGame();
         }
     }
-    public virtual IEnumerator RoundTimer()
-    {
-        if (RoundTimerValues.TimeLimit <= 0)
-        {
-            while (true)
-            {
-                RoundTimerValues.Time += Time.deltaTime;
-                yield return new WaitForFixedUpdate();
-            }
-        }
-        else
-        {
-            while (RoundTimerValues.Time < RoundTimerValues.TimeLimit)
-            {
-                RoundTimerValues.Time += Time.deltaTime;
-                yield return new WaitForFixedUpdate();
-            }
-            EndRound();
-        }
-    }
-
-    //rounds
-    public TimerValues RoundTimerValues = new TimerValues();
-    [Header("Read Only")]
-    public int CurrentRound = 0;
-
-    public virtual void EndRound()
-    {
-        GameManager.StopCoroutine(RoundTimer());
-    }
-    public virtual void StartRound()
-    {
-        GameState.ChangeStateIf(ExampleGameState.Starting, ExampleGameState.InProgress);
-        GameManager.StartCoroutine(RoundTimer());
-        CurrentRound++;
-    }
-
-
-
 
 
     public class StateMachine<T>

@@ -4,7 +4,7 @@ using Teams;
 using UnityEngine;
 // place in Unity\Editor\Data\Resources\ScriptTemplates
 [CreateAssetMenu(fileName = "Infection", menuName = "GameType/Example/Infection")]
-public class Infection : ExampleGameTypeIntegration
+public class Infection : ExampleGameTypeWithRoundsIntegration
 {
     [Space(10)]
     [Header("Teams")]
