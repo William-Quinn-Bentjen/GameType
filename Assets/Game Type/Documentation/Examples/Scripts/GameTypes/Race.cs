@@ -146,36 +146,39 @@ public class Race : ExampleGameTypeIntegration {
     }
     public void CheckPointTouched(Collider other, int checkPointNumber)
     {
-        ExampleMember player = other.GetComponent<ExampleMember>();
-        if (player != null)
+        if (GameState.Key == ExampleGameState.InProgress)
         {
-            if (!racePositions.ContainsKey(player))
+            ExampleMember player = other.GetComponent<ExampleMember>();
+            if (player != null)
             {
-                racePositions.Add(player, new PlayerCheckPointData(orderedCheckPoints.Keys[0])); 
-            }
-            PlayerCheckPointData data = racePositions[player];
-            // did we reach the correct checkpoint?
-            if (data.CheckPoint == checkPointNumber)
-            {
-                //is it the final checkpoint?
-                if (checkPointNumber == finalCheckPoint)
+                if (!racePositions.ContainsKey(player))
                 {
-                    // lap complete back to first check point
-                    data.RecordLap(GameTimer.Time);
-                    data.Lap++;
-                    data.CheckPoint = firstCheckPoint;
-                    //end of race?
-                    if (data.Lap >= laps)
-                    {
-                        //someone finished
-                        FinishRace(player);
-                    }
-                    
+                    racePositions.Add(player, new PlayerCheckPointData(orderedCheckPoints.Keys[0]));
                 }
-                else
+                PlayerCheckPointData data = racePositions[player];
+                // did we reach the correct checkpoint?
+                if (data.CheckPoint == checkPointNumber)
                 {
-                    Debug.Log(other.name + " reached checkpoint #" + checkPointNumber);
-                    data.CheckPoint = orderedCheckPoints.Keys[orderedCheckPoints.IndexOfKey(data.CheckPoint) + 1];
+                    //is it the final checkpoint?
+                    if (checkPointNumber == finalCheckPoint)
+                    {
+                        // lap complete back to first check point
+                        data.RecordLap(GameTimer.Time);
+                        data.Lap++;
+                        data.CheckPoint = firstCheckPoint;
+                        //end of race?
+                        if (data.Lap >= laps)
+                        {
+                            //someone finished
+                            FinishRace(player);
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.Log(other.name + " reached checkpoint #" + checkPointNumber);
+                        data.CheckPoint = orderedCheckPoints.Keys[orderedCheckPoints.IndexOfKey(data.CheckPoint) + 1];
+                    }
                 }
             }
         }
@@ -188,6 +191,7 @@ public class Race : ExampleGameTypeIntegration {
     public override void StartGame()
     {
         startedEndTimer = false;
+        withinTimer = 0;
         racePositions.Clear();
         finishedRacers.Clear();
         foreach (Teams.TeamMember player in players)
@@ -237,6 +241,7 @@ public class Race : ExampleGameTypeIntegration {
         if (GameState.Key == ExampleGameState.InProgress)
         {
             startedEndTimer = true;
+            withinTimer = 0; 
             while(withinTimer < withinSeconds)
             {
                 withinTimer += Time.deltaTime;

@@ -14,7 +14,7 @@ MonoBehaviour:
   GameManager: {fileID: 0}
   GameTimer:
     TimeLimit: 0
-    Time: 17.92022
+    Time: 21.340298
   players:
   - {fileID: 0}
   - {fileID: 0}
@@ -26,6 +26,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   laps: 1
-  raceEndConditions: 2
-  withinSeconds: 1
-  withinTimer: 1.0199996
+  raceEndConditions: 3
+  withinSeconds: 3
+  withinTimer: 3.0199978
