@@ -7,7 +7,6 @@ public class PlayerInfo : MonoBehaviour {
     
     public struct PlayerData
     {
-        
         public string playerName;
         public Color personalColor;
         public Teams.Team teamPreference;

@@ -36,6 +36,7 @@ namespace Spawning
                 }
             }
         }
+        public bool blockedCheckStarted = false;
         [Header("Team Settings")]
         [Tooltip("Neutral spawns points can spawn any team")]
         public bool neutral = true;
@@ -134,7 +135,7 @@ namespace Spawning
             switch (_colliderType)
             {
                 case ColliderTypeEnum.Capsule:
-                    cols = new List<Collider>(Physics.OverlapCapsule(transform.TransformPoint(colliders.capsuleCollider.center + new Vector3(0, -colliders.capsuleCollider.height / 2, 0)), transform.TransformPoint(colliders.capsuleCollider.center + new Vector3(0, colliders.capsuleCollider.height / 2, 0)), colliders.capsuleCollider.radius, blockedCheckLayerMask.value, triggerInteraction));
+                    cols = new List<Collider>(Physics.OverlapCapsule(transform.TransformPoint(colliders.capsuleCollider.center + new Vector3(0, colliders.capsuleCollider.height - (colliders.capsuleCollider.radius * 2), 0)), transform.TransformPoint(colliders.capsuleCollider.center + new Vector3(0, colliders.capsuleCollider.height - (colliders.capsuleCollider.radius * 2), 0)), colliders.capsuleCollider.radius, blockedCheckLayerMask.value, triggerInteraction));
                     cols.Remove(colliders.capsuleCollider);
                     break;
                 case ColliderTypeEnum.Box:
@@ -156,6 +157,19 @@ namespace Spawning
                 yield return new WaitForSecondsRealtime(BlockedCheckInterval);
             }
         }
+        public void StartBlockedCheck()
+        {
+            if (blockedCheckStarted == false && Application.isPlaying && isActiveAndEnabled)
+            {
+                blockedCheckStarted = true;
+                StartCoroutine(CheckSpawnZone());
+            }
+        }
+        public void StopBlockedCheck()
+        {
+            blockedCheckStarted = false;
+            StopCoroutine(CheckSpawnZone());
+        }
         [ContextMenu("Setup Colliders")]
         private void SetColliders()
         {
@@ -167,13 +181,21 @@ namespace Spawning
         }
         private void Awake()
         {
+            blockedCheckStarted = false;
             _blockingSpawnZone = new List<Collider>();
             SetColliders();
-            StartCoroutine(CheckSpawnZone());
+            StartBlockedCheck();
+        }
+        private void OnDisable()
+        {
+            Active = false;
+            StopBlockedCheck();
         }
         public virtual void Activate()
         {
             active = true;
+            _blockingSpawnZone = new List<Collider>();
+            StartBlockedCheck();
         }
         public virtual void Deactivate()
         {

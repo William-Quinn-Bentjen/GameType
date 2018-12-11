@@ -66,7 +66,12 @@ public class GameType : ScriptableObject {
     /// <returns>If the game successfully started returns true</returns>
     public virtual bool BeginGame()
     {
-        return CanStart();
+        if (CanStart())
+        {
+            EnterMap();
+            return true;
+        }
+        return false;
     }
     /// <summary>
     /// Things like minimum player checks should be done here to determine if the game can start

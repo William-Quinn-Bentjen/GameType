@@ -84,5 +84,67 @@ namespace Spawning
                 return null;
             }
         }
+        public static void Spawn(SpawnPoint spawn, Transform player, Vector3 offset, bool useSpawnRotation = true)
+        {
+            player.position = spawn.transform.position + offset;
+            if (useSpawnRotation) player.rotation = spawn.transform.rotation;
+            spawn.Active = false;
+            //reactivate when not blocked
+            spawn.StartBlockedCheck();
+        }
+        public static bool InitalSpawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        {
+            SpawnPoint spawn = GetInitalSpawnPoint(player.team, allowRespawnIfNoInital);
+            if (spawn != null)
+            {
+                Spawn(spawn, player.transform, offset, useSpawnRotation);
+                return true;
+            }
+            return false;
+        }
+        public static int InitalSpawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        {
+            int retVal = players.Count;
+            for (int i = 0; i < players.Count;i++)
+            {
+                if (InitalSpawn(players[i], offset, useSpawnRotation, allowRespawnIfNoInital))
+                {
+                    players.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    retVal++;
+                }
+            }
+            return retVal;
+        }
+        public static bool Respawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true)
+        {
+            SpawnPoint spawn = GetRespawnPoint(player.team);
+            if (spawn != null)
+            {
+                Spawn(spawn, player.transform, offset, useSpawnRotation);
+                return true;
+            }
+            return false;
+        }
+        public static int Respawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true)
+        {
+            int retVal = players.Count;
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (Respawn(players[i], offset, useSpawnRotation))
+                {
+                    players.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    retVal++;
+                }
+            }
+            return retVal;
+        }
     }
 }
