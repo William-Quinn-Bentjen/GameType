@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeIntegration : ExtendedGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
+public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
 {
     public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
     public override bool AttemptJoin(Teams.Team team, Teams.TeamMember member)

@@ -67,7 +67,7 @@ public class FFASlayer : ExampleGameTypeIntegration {
     {
         if (GameState.CurrentState.Key == ExampleGameState.InProgress)
         {
-            GameManager.StopCoroutine(GameTimer());
+            GameManager.StopCoroutine(GameTimerFunction());
             GameState.ChangeState(ExampleGameState.Ending);
             Debug.Log("GameOver");
         }
