@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,36 +27,50 @@ public class PlayerInfo : MonoBehaviour {
             inputType = JengaPlayer.InputType.keyboard;
         }
     }
-    public InputField playerName;
-    public Slider r;
-    public Slider g;
-    public Slider b;
-    public Image personalColor;
-    public Color color;
-    public Dropdown teamPref;
-    public Dropdown input;
-    public Button cancel;
-    public Button done;
+    [System.Serializable]
+    public struct UIComponents
+    {
+        public InputField playerName;
+        public Slider r;
+        public Slider g;
+        public Slider b;
+        public Image personalColor;
+        public Dropdown teamPref;
+        public Dropdown input;
+        public Button cancel;
+        public Button done;
+    }
+    public UIComponents UI;
+
+    //public InputField UI.playerName;
+    //public Slider UI.r;
+    //public Slider UI.g;
+    //public Slider UI.b;
+    //public Image UI.personalColor;
+    //public Dropdown UI.teamPref;
+    //public Dropdown UI.input;
+    //public Button UI.cancel;
+    //public Button UI.done;
     private void Reset()
     {
-        playerName = GetComponentInChildren<InputField>();
+        UI.playerName = GetComponentInChildren<InputField>();
         Slider[] sliders = GetComponentsInChildren<Slider>();
         foreach(Slider sli in sliders)
         {
             switch(sli.name)
             {
                 case "R Slider":
-                    r = sli;
+                    UI.r = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
                 case "G Slider":
-                    g = sli;
+                    UI.g = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
                 case "B Slider":
-                    b = sli;
+                    UI.b = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
@@ -66,7 +81,7 @@ public class PlayerInfo : MonoBehaviour {
         {
             if (img.name == "Output Color")
             {
-                personalColor = img;
+                UI.personalColor = img;
             }
         }
         Dropdown[] dropdowns = GetComponentsInChildren<Dropdown>();
@@ -75,10 +90,17 @@ public class PlayerInfo : MonoBehaviour {
             switch(dropdown.name)
             {
                 case "Team Pref":
-                    teamPref = dropdown;
+                    UI.teamPref = dropdown;
+                    UI.teamPref.options.Clear();
                     break;
                 case "Input":
-                    input = dropdown;
+                    UI.input = dropdown;
+                    UI.input.options.Clear();
+                    UI.input.options.Add(new Dropdown.OptionData("Keyboard"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 1"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 2"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 3"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 4"));
                     break;
             }
         }
@@ -88,25 +110,45 @@ public class PlayerInfo : MonoBehaviour {
             switch(button.name)
             {
                 case "Complete":
-                    done = button;
+                    UI.done = button;
+                    UI.done.onClick.AddListener(new UnityEngine.Events.UnityAction(Done));
                     break;
                 case "Cancel":
-                    cancel = button;
+                    UI.cancel = button;
                     break;
             }
         }
     }
     private void OnEnable()
     {
-        foreach (Slider sli in new Slider[3] { r, g, b })
+        foreach (Slider sli in new Slider[3] { UI.r, UI.g, UI.b })
         {
             sli.onValueChanged.RemoveAllListeners();
             sli.onValueChanged.AddListener(delegate { UpdateColor(); });
         }
+        UI.done.onClick.AddListener(new UnityEngine.Events.UnityAction(Done));
+        UI.cancel.onClick.AddListener(new UnityEngine.Events.UnityAction(Cancel));
         UpdateColor();
     }
     public void UpdateColor()
     {
-        personalColor.color = new Color(r.value, g.value, b.value, 1);
+        UI.personalColor.color = new Color(UI.r.value, UI.g.value, UI.b.value, 1);
     }
+    public void SetAvalableTeams(List<Teams.Team> teams)
+    {
+        foreach (Teams.Team team in teams)
+        {
+
+        }
+    }
+    public void Done()
+    {
+        //finalize
+        gameObject.SetActive(false);
+    }
+    public void Cancel()
+    {
+        gameObject.SetActive(false);
+    }
+    
 }
