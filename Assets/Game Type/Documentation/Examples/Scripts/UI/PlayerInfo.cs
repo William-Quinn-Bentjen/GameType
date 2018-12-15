@@ -175,6 +175,10 @@ public class PlayerInfo : MonoBehaviour {
         {
             target.teamPreference = avalableTeams[UI.teamPref.value];
         }
+        if (targetDisplay != null)
+        {
+            targetDisplay.data = target;
+        }
         onDone?.Invoke();
         CloseWindow();
     }
@@ -186,6 +190,7 @@ public class PlayerInfo : MonoBehaviour {
     }
     public void OpenWindow(ref PlayerData playerData)
     {
+        targetDisplay = null;
         UI.remove.gameObject.SetActive(false);
         target = playerData;
         UI.playerName.text = target.playerName;
@@ -207,9 +212,10 @@ public class PlayerInfo : MonoBehaviour {
     }
     public void OpenEditWindow(PlayerDisplay playerDisplay)
     {
-        targetDisplay = playerDisplay;
+        target = playerDisplay.data;
         onDone += playerDisplay.UpdateUI;
         OpenWindow(ref playerDisplay.data);
+        targetDisplay = playerDisplay;
         UI.remove.gameObject.SetActive(true);
         UI.remove.onClick.AddListener(RemovePlayer);
     }
@@ -219,6 +225,9 @@ public class PlayerInfo : MonoBehaviour {
         onCancel = null;
         gameObject.SetActive(false);
         onClose?.Invoke();
+        onClose = null;
+        onOpen = null;
+        targetDisplay = null;
 }
     public void RemovePlayer()
     {

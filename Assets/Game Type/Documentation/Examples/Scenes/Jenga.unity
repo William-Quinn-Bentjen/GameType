@@ -402,9 +402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b661d202056406745a03dfdfde950319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameType: {fileID: 0}
-  playersDisplay: {fileID: 0}
-  playButton: {fileID: 0}
+  gameType: {fileID: 11400000, guid: f922cebc9d0d2a8409287361fb430a9e, type: 2}
+  playersDisplay: {fileID: 1559006928}
+  playerInfo: {fileID: 1575067123}
+  playButton: {fileID: 723539655}
 --- !u!1 &12150674
 GameObject:
   m_ObjectHideFlags: 0

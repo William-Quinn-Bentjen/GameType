@@ -19,6 +19,7 @@ public class PlayerDisplay : MonoBehaviour {
     public void Edit()
     {
         playersPannel.playerInfoPannel.OpenEditWindow(this);
+        
     }
     public void UpdateUI(PlayerInfo.PlayerData newPlayerData)
     {
