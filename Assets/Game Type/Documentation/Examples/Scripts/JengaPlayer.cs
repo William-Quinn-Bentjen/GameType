@@ -10,7 +10,8 @@ public class JengaPlayer : Teams.TeamMember {
         controller1,
         controller2,
         controller3,
-        controller4
+        controller4,
+        none
     }
     public InputType input;
 }

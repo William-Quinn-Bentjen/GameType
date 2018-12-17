@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour {
-    
+    [System.Serializable]
     public struct PlayerData
     {
         public string playerName;
@@ -26,36 +27,58 @@ public class PlayerInfo : MonoBehaviour {
             inputType = JengaPlayer.InputType.keyboard;
         }
     }
-    public InputField playerName;
-    public Slider r;
-    public Slider g;
-    public Slider b;
-    public Image personalColor;
-    public Color color;
-    public Dropdown teamPref;
-    public Dropdown input;
-    public Button cancel;
-    public Button done;
+    [System.Serializable]
+    public struct UIComponents
+    {
+        public InputField playerName;
+        public Slider r;
+        public Slider g;
+        public Slider b;
+        public Image personalColor;
+        public Dropdown teamPref;
+        public Dropdown input;
+        public Button cancel;
+        public Button done;
+        public Button remove;
+    }
+    public UIComponents UI;
+    public PlayerData target;
+    public PlayerDisplay targetDisplay;
+    public List<Teams.Team> avalableTeams = new List<Teams.Team>();
+    public delegate void OnAction();
+    public OnAction onDone;
+    public OnAction onCancel;
+    public OnAction onOpen;
+    public OnAction onClose;
+    //public InputField UI.playerName;
+    //public Slider UI.r;
+    //public Slider UI.g;
+    //public Slider UI.b;
+    //public Image UI.personalColor;
+    //public Dropdown UI.teamPref;
+    //public Dropdown UI.input;
+    //public Button UI.cancel;
+    //public Button UI.done;
     private void Reset()
     {
-        playerName = GetComponentInChildren<InputField>();
+        UI.playerName = GetComponentInChildren<InputField>();
         Slider[] sliders = GetComponentsInChildren<Slider>();
         foreach(Slider sli in sliders)
         {
             switch(sli.name)
             {
                 case "R Slider":
-                    r = sli;
+                    UI.r = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
                 case "G Slider":
-                    g = sli;
+                    UI.g = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
                 case "B Slider":
-                    b = sli;
+                    UI.b = sli;
                     sli.onValueChanged.RemoveAllListeners();
                     sli.onValueChanged.AddListener(delegate { UpdateColor(); });
                     break;
@@ -66,7 +89,7 @@ public class PlayerInfo : MonoBehaviour {
         {
             if (img.name == "Output Color")
             {
-                personalColor = img;
+                UI.personalColor = img;
             }
         }
         Dropdown[] dropdowns = GetComponentsInChildren<Dropdown>();
@@ -75,10 +98,18 @@ public class PlayerInfo : MonoBehaviour {
             switch(dropdown.name)
             {
                 case "Team Pref":
-                    teamPref = dropdown;
+                    UI.teamPref = dropdown;
+                    UI.teamPref.options.Clear();
                     break;
                 case "Input":
-                    input = dropdown;
+                    UI.input = dropdown;
+                    UI.input.options.Clear();
+                    UI.input.options.Add(new Dropdown.OptionData("Keyboard"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 1"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 2"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 3"));
+                    UI.input.options.Add(new Dropdown.OptionData("Controller 4"));
+                    UI.input.options.Add(new Dropdown.OptionData("None"));
                     break;
             }
         }
@@ -88,25 +119,123 @@ public class PlayerInfo : MonoBehaviour {
             switch(button.name)
             {
                 case "Complete":
-                    done = button;
+                    UI.done = button;
+                    UI.done.onClick.AddListener(new UnityEngine.Events.UnityAction(Done));
                     break;
                 case "Cancel":
-                    cancel = button;
+                    UI.cancel = button;
+                    break;
+                case "Remove Player":
+                    UI.remove = button;
+                    button.gameObject.SetActive(false);
                     break;
             }
         }
     }
     private void OnEnable()
     {
-        foreach (Slider sli in new Slider[3] { r, g, b })
+        foreach (Slider sli in new Slider[3] { UI.r, UI.g, UI.b })
         {
             sli.onValueChanged.RemoveAllListeners();
             sli.onValueChanged.AddListener(delegate { UpdateColor(); });
         }
         UpdateColor();
+        target = new PlayerData();
     }
     public void UpdateColor()
     {
-        personalColor.color = new Color(r.value, g.value, b.value, 1);
+        UI.personalColor.color = new Color(UI.r.value, UI.g.value, UI.b.value, 1);
+    }
+    public void SetAvalableTeams(List<Teams.Team> teams)
+    {
+        UI.teamPref.options.Clear();
+        avalableTeams.Clear();
+        if (teams != null)
+        {
+            List<Dropdown.OptionData> newOptions = new List<Dropdown.OptionData>();
+            foreach (Teams.Team team in teams)
+            {
+                if (team.data != null)
+                {
+                    newOptions.Add(new Dropdown.OptionData(team.data.TeamName));
+                    avalableTeams.Add(team);
+                }
+            }
+            UI.teamPref.options = newOptions;
+        }
+    }
+    public void Done()
+    {
+        UI.remove.onClick.RemoveListener(RemovePlayer);
+        //finalize
+        target.playerName = UI.playerName.text;
+        target.personalColor = new Color(UI.r.value, UI.g.value, UI.b.value);
+        target.inputType = (JengaPlayer.InputType)UI.input.value;
+        if (avalableTeams.Count != 0)
+        {
+            target.teamPreference = avalableTeams[UI.teamPref.value];
+        }
+        if (targetDisplay != null)
+        {
+            targetDisplay.data = target;
+        }
+        onDone?.Invoke();
+        CloseWindow();
+    }
+    public void Cancel()
+    {
+        UI.remove.onClick.RemoveListener(RemovePlayer);
+        onCancel?.Invoke();
+        CloseWindow();
+    }
+    public void OpenWindow(ref PlayerData playerData)
+    {
+        targetDisplay = null;
+        UI.remove.gameObject.SetActive(false);
+        target = playerData;
+        UI.playerName.text = target.playerName;
+        UI.r.value = target.personalColor.r;
+        UI.g.value = target.personalColor.g;
+        UI.b.value = target.personalColor.b;
+        if (avalableTeams.Contains(playerData.teamPreference))
+        {
+            UI.teamPref.value = avalableTeams.IndexOf(playerData.teamPreference);
+        }
+        else
+        {
+            UI.teamPref.value = 0;
+        }
+        UI.input.value = (int)playerData.inputType;
+        onOpen?.Invoke();
+        gameObject.SetActive(true);
+
+    }
+    public void OpenEditWindow(PlayerDisplay playerDisplay)
+    {
+        target = playerDisplay.data;
+        onDone += playerDisplay.UpdateUI;
+        OpenWindow(ref playerDisplay.data);
+        targetDisplay = playerDisplay;
+        UI.remove.gameObject.SetActive(true);
+        UI.remove.onClick.AddListener(RemovePlayer);
+    }
+    public void CloseWindow()
+    {
+        onDone = null;
+        onCancel = null;
+        gameObject.SetActive(false);
+        onClose?.Invoke();
+        onClose = null;
+        onOpen = null;
+        targetDisplay = null;
+}
+    public void RemovePlayer()
+    {
+        UI.remove.onClick.RemoveListener(RemovePlayer);
+        if (targetDisplay != null)
+        {
+            targetDisplay.playersDisplay.RemovePlayer(targetDisplay.data);
+        }
+        CloseWindow();
     }
 }

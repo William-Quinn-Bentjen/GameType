@@ -30,14 +30,13 @@ public class TestBuild : MonoBehaviour {
 	void Update () {
         string teamName = "Name";
         int teamMembers = 0;
-        bool memberHasTeam = false;
         if (team != null && team.data != null)
         {
             teamName = team.data.TeamName;
             teamMembers = team.members.Count;
             if (member.team != null)
             {
-                memberHasTeam = true;
+                bool memberHasTeam = true;
             }
         }
         TeamSlayer teamSlayer = (TeamSlayer)GameManager.Instance.GameType;
