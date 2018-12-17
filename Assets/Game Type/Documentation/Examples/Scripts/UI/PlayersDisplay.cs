@@ -58,7 +58,9 @@ public class PlayersDisplay : MonoBehaviour
     {
         for(int i = 0; i < players.Count; i++)
         {
-            Destroy(players[i]);
+            Destroy(players[i].gameObject);
         }
+        players.Clear();
+        playersData.Clear();
     }
 }

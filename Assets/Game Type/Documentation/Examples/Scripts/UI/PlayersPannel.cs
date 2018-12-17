@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class PlayersPannel : MonoBehaviour {
+    [Tooltip("When a player is created these properties are copied")]
     public PlayerInfo.PlayerData newPlayerData = new PlayerInfo.PlayerData()
     {
         playerName = "",
@@ -10,9 +11,11 @@ public class PlayersPannel : MonoBehaviour {
         teamPreference = null,
         inputType = JengaPlayer.InputType.none
     };
+
+    [Tooltip("Edit window copy of new player")]
+    public PlayerInfo.PlayerData playerDataHolder;
     public PlayerInfo playerInfoPannel;
     public PlayersDisplay playersDisplay;
-    public PlayerInfo.PlayerData newPlayerInfo;
 
     public Button addPlayerButton;
     public Button removeAllPlayersButton;
@@ -31,10 +34,6 @@ public class PlayersPannel : MonoBehaviour {
     {
         playersDisplay.RemovePlayer(playerData);
     }
-    protected void DeleteAllPlayers()
-    {
-        playersDisplay.RemoveAllPlayers();
-    }
     public void AddPlayer()
     {
         PlayerInfo.PlayerData newPlayer = new PlayerInfo.PlayerData()
@@ -44,14 +43,14 @@ public class PlayersPannel : MonoBehaviour {
             teamPreference = newPlayerData.teamPreference,
             inputType = newPlayerData.inputType
         };
-        newPlayerInfo = newPlayer;
+        playerDataHolder = newPlayer;
         playerInfoPannel.OpenWindow(ref newPlayer);
         playerInfoPannel.onDone += NewPlayer;
         playerInfoPannel.onCancel += CancelNewPlayer;
     }
     public void RemoveAllPlayers()
     {
-
+        playersDisplay.RemoveAllPlayers();
     }
     private void Awake()
     {
