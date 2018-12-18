@@ -4,18 +4,69 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Lobby : MonoBehaviour {
     public static Lobby Instance;
-    public GameType gameType;
+    public bool isEnabled
+    {
+        get
+        {
+            return gameObject.activeInHierarchy;
+        }
+        set
+        {
+            if (value != gameObject.activeInHierarchy)
+            {
+                gameObject.SetActive(value);
+            }
+        }
+    }
+    public GameType gameType
+    {
+        get
+        {
+            return GameManager.Instance.GameType;
+        }
+        set
+        {
+            GameManager.Instance.GameType = value;
+        }
+    }
+    public Map map
+    {
+        get
+        {
+            return GameManager.Instance.map;
+        }
+        set
+        {
+            GameManager.Instance.map = value;
+        }
+    }
     public PlayersDisplay playersDisplay;
     public PlayerInfo playerInfo;
     public Button playButton;
+    private void Awake()
+    {
+        playersDisplay.AddPlayer(playersDisplay.playerDisplayPrefab.data);
+        CanPlay();
+
+    }
+    private void HideLobbyUI()
+    {
+        gameObject.SetActive(false);
+        map.onLoaded -= HideLobbyUI;
+    }
     public void Play()
     {
-        if (gameType != null)
+        if (gameType != null && map != null)
         {
-            // Can start checks done inside begin game
-            gameType.BeginGame();
-            // testing
-            gameObject.SetActive(false);
+            gameType.GameManagerMonoBehaviour = this;
+            ExampleInterface.IPlayerData playerDataList = gameType as ExampleInterface.IPlayerData;
+            
+            if (playerDataList != null) playerDataList.SetPlayerData(playersDisplay.playersData);
+            if (gameType.BeginGame())
+            {
+                map.onLoaded += HideLobbyUI;
+                map.Load();
+            }
         }
         else
         {

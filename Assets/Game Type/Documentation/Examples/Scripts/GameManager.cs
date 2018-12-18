@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+    public Lobby lobby;
+    public Map map;
     public GameType GameType;
     public WinUI winUI;
     public List<Teams.TeamMember> players = new List<Teams.TeamMember>(); 
@@ -48,24 +50,6 @@ public class GameManager : MonoBehaviour {
         else
         {
             instance = this;
-            if (GameType != null)
-            {
-                GameType.GameManager = this;
-                GetPlayers();
-                if (GameType is GameTypes.Interfaces.IPlayers) (GameType as GameTypes.Interfaces.IPlayers).SetPlayers(players);
-                if (GameType.BeginGame())
-                {
-                    GameType.StartGame();
-                    Debug.Log(GameType.name + " Game Started!");
-                }
-            }
-            else
-            {
-                foreach(Teams.Team team in Resources.FindObjectsOfTypeAll<Teams.Team>())
-                {
-                    team.KickAll();
-                }
-            }
         }
     }
     private void OnDestroy()
@@ -94,21 +78,5 @@ public class GameManager : MonoBehaviour {
             //GameType = null;
         }
 
-    }
-    public void SetWinnerText(Teams.Team winner)
-    {
-        if (winUI != null)
-        {
-            winUI.SetWinnerText(winner);
-        }
-    }
-    [ContextMenu("Get Players From Scene")]
-    public void GetPlayers()
-    {
-        players = new List<Teams.TeamMember>(FindObjectsOfType<Teams.TeamMember>());
-    }
-    public static void ReturnToMenu()
-    {
-        SceneManager.LoadScene("Menu");
     }
 }
