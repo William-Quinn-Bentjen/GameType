@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Teams;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Jenga", menuName = "GameType/Example/Jenga")]
-public class Jenga : ExtendedWithRoundsGameType {
+public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.ITeams {
 
     public float totalTeamPreferenceWeight = 0;
     //teams
@@ -12,16 +13,18 @@ public class Jenga : ExtendedWithRoundsGameType {
         public Teams.Team Survivors;
         public Teams.Team Demolisher;
         public Teams.Team Spectators;
+        public List<Team> GetTeams()
+        {
+            return new List<Team>(new Team[3] { Survivors, Demolisher, Spectators });
+        }
     }
     //players and data
     [Header("Team Settings")]
     public JengaTeams teams = new JengaTeams();
-    public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
-    public List<JengaPlayer> players = new List<JengaPlayer>();
+    public TeamWeights teamPrefenceWeights = new TeamWeights(1, 3, 5);
     //spawn settings
     [Header("Spawn Settings")]
-    public TeamWeights teamPrefenceWeights = new TeamWeights(1, 3, 5);
-    public JengaPlayer defaultJengaPlayer;
+    public ExamplePlayer defaultJengaPlayer;
     public Vector3 spawnOffset = Vector3.zero;
     [System.Serializable]
     public struct TeamWeights
@@ -52,7 +55,7 @@ public class Jenga : ExtendedWithRoundsGameType {
     public float eliminatedMultiplier = 1;
     [Tooltip("Points for eliminating a survivor")]
     public float elimination = 1;
-    public Dictionary<JengaPlayer, float> score = new Dictionary<JengaPlayer, float>();
+    public Dictionary<ExamplePlayer, float> score = new Dictionary<ExamplePlayer, float>();
     // bonus
     [Tooltip("Points for surviving a round")]
     public float survivedRoundBonus = 5;
@@ -91,11 +94,12 @@ public class Jenga : ExtendedWithRoundsGameType {
     {
         if (defaultJengaPlayer != null)
         {
+            players.Clear();
             totalTeamPreferenceWeight = 0;
             foreach (PlayerInfo.PlayerData data in playerData)
             {
                 //instantiate player
-                JengaPlayer player = Instantiate(defaultJengaPlayer);
+                ExamplePlayer player = Instantiate(defaultJengaPlayer);
                 data.SetPlayerFromData(player);
                 players.Add(player);
                 if (data.teamPreference == teams.Survivors)
@@ -149,12 +153,12 @@ public class Jenga : ExtendedWithRoundsGameType {
     void SetupScores()
     {
         score.Clear();
-        foreach (JengaPlayer player in players)
+        foreach (ExamplePlayer player in players)
         {
             score.Add(player, 0);
         }
     }
-    void AddScore(JengaPlayer player, float scoreToAdd = 0)
+    void AddScore(ExamplePlayer player, float scoreToAdd = 0)
     {
         if (score.ContainsKey(player) == false) score.Add(player, 0);
         score[player] += scoreToAdd;
@@ -163,15 +167,7 @@ public class Jenga : ExtendedWithRoundsGameType {
             EndGame();
         }
     }
-    public struct JengaDeathInfo
-    {
-        public Collision Collision;
-        public Collider Other;
-        public JengaPlayer Victim;
-        public GameObject Weapon;
-        public GameObject Killer;
-    }
-    public void EvaluateDeath(JengaDeathInfo deathInfo)
+    public override void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo)
     {
         if (deathInfo.Victim.team == teams.Survivors)
         {
@@ -180,7 +176,7 @@ public class Jenga : ExtendedWithRoundsGameType {
 
             if (teams.Demolisher.members.Count > 0)
             {
-                JengaPlayer demolisher = teams.Demolisher.members[0] as JengaPlayer;
+                ExamplePlayer demolisher = teams.Demolisher.members[0] as ExamplePlayer;
                 if (demolisher != null)
                 {
                     AddScore(demolisher, elimination);
@@ -213,26 +209,17 @@ public class Jenga : ExtendedWithRoundsGameType {
         base.OnEnable();
         GenerateTeams();
     }
-    //lobby         assign/join teams (create playerdata)                          
-    public override bool BeginGame()
-    {
-        if (CanStart())
-        {
-            StartGame();
-            return true;
-        }
-        return false;
-    }
     public override bool CanStart()
     {
-        return (playerData.Count > 1);
+        playerData = GameManager.Instance.lobby.playersDisplay.playersData;
+        CreatePlayers();
+        return base.CanStart();
     }
     public override void EnterMap()
     {
         base.EnterMap();
         Spawning.SpawnManager.ClearSpawnData();
         Spawning.SpawnManager.GatherSpawnData();
-        CreatePlayers();
         SetupScores();
     }
     public override void StartRound()
@@ -249,7 +236,7 @@ public class Jenga : ExtendedWithRoundsGameType {
             {
                 foreach (Teams.TeamMember member in teams.Survivors.members)
                 {
-                    JengaPlayer survivor = member as JengaPlayer;
+                    ExamplePlayer survivor = member as ExamplePlayer;
                     if (survivor != null)
                     {
                         AddScore(survivor, survivedRoundBonus);
@@ -259,7 +246,7 @@ public class Jenga : ExtendedWithRoundsGameType {
         }
         else
         {
-            JengaPlayer demolisher = teams.Demolisher.members[0] as JengaPlayer;
+            ExamplePlayer demolisher = teams.Demolisher.members[0] as ExamplePlayer;
             if (demolisher != null)
             {
                 AddScore(demolisher, elimination);
@@ -275,14 +262,15 @@ public class Jenga : ExtendedWithRoundsGameType {
             if (GameState.Key != ExampleGameState.Ending) StartRound();
         }
     }
-    public override void EndGame()
+    
+    // Teams Interface
+    public List<Team> GetTeams()
     {
-        base.EndGame();
-        LeaveMap();
+        return teams.GetTeams();
     }
-    public override void LeaveMap()
+    // shouldnt be called just needed for teams interface
+    public void SetTeams(List<Team> teams)
     {
-        base.LeaveMap();
-        //to lobby
+        throw new System.NotImplementedException();
     }
 }

@@ -46,7 +46,7 @@ public class JengaGameManager : MonoBehaviour {
             instance = this;
             if (GameType != null)
             {
-                GameType.GameManager = this;
+                GameType.GameManagerMonoBehaviour = this;
                 if (GameType.BeginGame())
                 {
                     Debug.Log(GameType.name + " Game Started!");

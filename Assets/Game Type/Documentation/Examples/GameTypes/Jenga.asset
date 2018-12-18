@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0bee81d4b835ed43bb5a97c69cb7ced, type: 3}
   m_Name: Jenga
   m_EditorClassIdentifier: 
-  GameManager: {fileID: 0}
+  GameManagerMonoBehaviour: {fileID: 0}
   GameTimer:
     TimeLimit: 0
     Time: 0
@@ -19,17 +19,24 @@ MonoBehaviour:
     TimeLimit: 0
     Time: 0
   CurrentRound: 0
-  totalTeamPreferenceWeight: 0
+  playerData:
+  - playerName: 
+    personalColor: {r: 0, g: 0, b: 0, a: 0}
+    teamPreference: {fileID: 0}
+    inputType: 0
+  players:
+  - {fileID: 0}
+  totalTeamPreferenceWeight: 1
   teams:
     Survivors: {fileID: 0}
     Demolisher: {fileID: 0}
     Spectators: {fileID: 0}
-  players: []
   teamPrefenceWeights:
     Neutral: 1
     Survivors: 3
     Demolisher: 5
-  defaultJengaPlayer: {fileID: 0}
+  defaultJengaPlayer: {fileID: 114821244630176452, guid: c691d9debb2ea454fa5e2a80e0aa96c7,
+    type: 2}
   spawnOffset: {x: 0, y: 0, z: 0}
   scoreToWin: 0
   maxRounds: 0

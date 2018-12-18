@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
@@ -35,9 +36,12 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+    public Lobby lobby;
     public GameType GameType;
-    public WinUI winUI;
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>(); 
+    public delegate void SceneLoad();
+    public SceneLoad onLoadScene;
+    //public WinUI winUI;
+    //public List<Teams.TeamMember> players = new List<Teams.TeamMember>(); 
     // Use this for initialization
     void Awake()
     {
@@ -48,67 +52,42 @@ public class GameManager : MonoBehaviour {
         else
         {
             instance = this;
-            if (GameType != null)
-            {
-                GameType.GameManager = this;
-                GetPlayers();
-                if (GameType is GameTypes.Interfaces.IPlayers) (GameType as GameTypes.Interfaces.IPlayers).SetPlayers(players);
-                if (GameType.BeginGame())
-                {
-                    GameType.StartGame();
-                    Debug.Log(GameType.name + " Game Started!");
-                }
-            }
-            else
-            {
-                foreach(Teams.Team team in Resources.FindObjectsOfTypeAll<Teams.Team>())
-                {
-                    team.KickAll();
-                }
-            }
+            UnityAction<Scene, LoadSceneMode> unityAction = new UnityAction<Scene, LoadSceneMode>(LoadSceneListener);
+            SceneManager.sceneLoaded += LoadSceneListener;
         }
     }
+
     private void OnDestroy()
     {
-        if (GameType != null)
-        {
-            GameType.EndGame();
-            if (GameType is Infection)
-            {
-                Infection inf = (GameType as Infection);
-                inf.InfectedTeam.KickAll();
-                inf.SurvivorTeam.KickAll();
-            }
-            if (GameType is TeamSlayer)
-            {
-                TeamSlayer slayer = (GameType as TeamSlayer);
-                foreach (Teams.Team team in slayer.score.Keys)
-                {
-                    if (team != null)
-                    {
-                        team.KickAll();
-                    }
-                }
-                slayer.score.Clear();
-            }
-            //GameType = null;
-        }
+        Debug.LogWarning("Game Manager destroyed");
+    }
 
-    }
-    public void SetWinnerText(Teams.Team winner)
+    public void LoadSceneListener(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (winUI != null)
+        onLoadScene?.Invoke();
+    }
+    public void LoadScene(Scene scene)
+    {
+        List<UnityEditor.EditorBuildSettingsScene> scenes = new List<UnityEditor.EditorBuildSettingsScene>();
+
+        //have some sort of for loop to cycle through scenes...
+        string pathToScene = UnityEditor.AssetDatabase.GetAssetPath(mySceneAssets[i]);
+        UnityEditor.EditorBuildSettingsScene scene = new UnityEditor.EditorBuildSettingsScene(pathToScene, true);
+        scenes.Add(scene);
+
+        //later on...
+        UnityEditor.EditorBuildSettings.scenes = scenes.ToArray();
+    }
+    IEnumerator LoadSceneAsync(int buildNumber)
+    {
+        Debug.Log("Loading Scene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildNumber);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
         {
-            winUI.SetWinnerText(winner);
+            yield return null;
         }
-    }
-    [ContextMenu("Get Players From Scene")]
-    public void GetPlayers()
-    {
-        players = new List<Teams.TeamMember>(FindObjectsOfType<Teams.TeamMember>());
-    }
-    public static void ReturnToMenu()
-    {
-        SceneManager.LoadScene("Menu");
+        Debug.Log("Scene Loaded!");
     }
 }

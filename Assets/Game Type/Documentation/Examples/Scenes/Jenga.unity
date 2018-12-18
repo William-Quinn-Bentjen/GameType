@@ -402,7 +402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b661d202056406745a03dfdfde950319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameType: {fileID: 11400000, guid: f922cebc9d0d2a8409287361fb430a9e, type: 2}
   playersDisplay: {fileID: 1559006928}
   playerInfo: {fileID: 1575067123}
   playButton: {fileID: 723539655}
@@ -507,6 +506,52 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1001 &29064202
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 3.4899998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4796308413075874, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1999358007934174, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+      propertyPath: m_Name
+      value: '"Players"'
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c691d9debb2ea454fa5e2a80e0aa96c7, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &44656443
 GameObject:
   m_ObjectHideFlags: 0
@@ -3136,13 +3181,13 @@ MonoBehaviour:
     personalColor: {r: 1, g: 1, b: 1, a: 1}
     teamPreference: {fileID: 0}
     inputType: 5
-  playerInfoPannel: {fileID: 1575067123}
-  playersDisplay: {fileID: 1559006928}
-  newPlayerInfo:
+  playerDataHolder:
     playerName: 
     personalColor: {r: 0, g: 0, b: 0, a: 0}
     teamPreference: {fileID: 0}
     inputType: 0
+  playerInfoPannel: {fileID: 1575067123}
+  playersDisplay: {fileID: 1559006928}
   addPlayerButton: {fileID: 2104839748}
   removeAllPlayersButton: {fileID: 1802614808}
 --- !u!1 &516842895
@@ -5096,7 +5141,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 723539656}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8383049}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &723539656
@@ -7408,7 +7464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1089965531}
-  - component: {fileID: 1089965532}
+  - component: {fileID: 1089965533}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -7429,7 +7485,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1089965532
+--- !u!114 &1089965533
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7437,9 +7493,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1089965530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcf90d12d7921b048ad522e71a5c008a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4368beaf730ae2d4d863361086c15971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lobby: {fileID: 8383049}
   GameType: {fileID: 11400000, guid: f922cebc9d0d2a8409287361fb430a9e, type: 2}
 --- !u!1 &1094554123
 GameObject:
@@ -11649,129 +11706,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1932512833}
   m_CullTransparentMesh: 0
---- !u!1 &1948514747
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1948514751}
-  - component: {fileID: 1948514750}
-  - component: {fileID: 1948514749}
-  - component: {fileID: 1948514748}
-  - component: {fileID: 1948514752}
-  - component: {fileID: 1948514753}
-  m_Layer: 0
-  m_Name: '"Players"'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!136 &1948514748
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1948514749
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &1948514750
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1948514751
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.17, y: 25, z: 3.4899998}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1948514752
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
---- !u!114 &1948514753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1948514747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77418aff44af396458181578a5115cf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  team: {fileID: 0}
-  joinOn:
-    Awake: 1
-    Enable: 0
-  leaveOn:
-    Destory: 0
-    Disable: 0
-  personalColor: {r: 0, g: 0, b: 0, a: 0}
-  input: 0
 --- !u!1 &2006685421
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace GameTypes
         public interface ITeams
         {
             List<Teams.Team> GetTeams();
-            List<Teams.Team> SetTeams(List<Teams.Team> teams);
+            void SetTeams(List<Teams.Team> teams);
         }
         public interface IFFA
         {

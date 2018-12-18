@@ -45,31 +45,32 @@ public class PlayerDisplay : MonoBehaviour {
         playerName.text = data.playerName;
         switch(data.inputType)
         {
-            case JengaPlayer.InputType.none:
+            case ExamplePlayer.InputType.none:
                 input.sprite = playersDisplay.None;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
-            case JengaPlayer.InputType.keyboard:
+            case ExamplePlayer.InputType.keyboard:
                 input.sprite = playersDisplay.Keyboard;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
-            case JengaPlayer.InputType.controller1:
+            case ExamplePlayer.InputType.controller1:
                 input.sprite = playersDisplay.Controller;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
-            case JengaPlayer.InputType.controller2:
+            case ExamplePlayer.InputType.controller2:
                 input.sprite = playersDisplay.Controller;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, -90);
                 break;
-            case JengaPlayer.InputType.controller3:
+            case ExamplePlayer.InputType.controller3:
                 input.sprite = playersDisplay.Controller;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, -270);
                 break;
-            case JengaPlayer.InputType.controller4:
+            case ExamplePlayer.InputType.controller4:
                 input.sprite = playersDisplay.Controller;
                 input.rectTransform.rotation = Quaternion.Euler(0, 0, -180);
                 break;
         }
+        GameManager.Instance.lobby.CanPlay();
     }
     private void Reset()
     {

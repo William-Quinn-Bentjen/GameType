@@ -11,20 +11,20 @@ public class PlayerInfo : MonoBehaviour {
         public string playerName;
         public Color personalColor;
         public Teams.Team teamPreference;
-        public JengaPlayer.InputType inputType;
-        public void SetPlayerFromData(JengaPlayer player)
+        public ExamplePlayer.InputType inputType;
+        public void SetPlayerFromData(ExamplePlayer player)
         {
             player.name = playerName;
             player.personalColor = personalColor;
             player.team = teamPreference;
             player.input = inputType;
         }
-        public PlayerData(JengaPlayer player)
+        public PlayerData(ExamplePlayer player)
         {
             playerName = player.name;
             personalColor = player.personalColor;
             teamPreference = player.team;
-            inputType = JengaPlayer.InputType.keyboard;
+            inputType = ExamplePlayer.InputType.keyboard;
         }
     }
     [System.Serializable]
@@ -170,7 +170,7 @@ public class PlayerInfo : MonoBehaviour {
         //finalize
         target.playerName = UI.playerName.text;
         target.personalColor = new Color(UI.r.value, UI.g.value, UI.b.value);
-        target.inputType = (JengaPlayer.InputType)UI.input.value;
+        target.inputType = (ExamplePlayer.InputType)UI.input.value;
         if (avalableTeams.Count != 0)
         {
             target.teamPreference = avalableTeams[UI.teamPref.value];
@@ -228,6 +228,7 @@ public class PlayerInfo : MonoBehaviour {
         onClose = null;
         onOpen = null;
         targetDisplay = null;
+        GameManager.Instance.lobby.CanPlay();
 }
     public void RemovePlayer()
     {

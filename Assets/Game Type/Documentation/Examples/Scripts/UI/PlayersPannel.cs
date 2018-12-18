@@ -9,7 +9,7 @@ public class PlayersPannel : MonoBehaviour {
         playerName = "",
         personalColor = Color.white,
         teamPreference = null,
-        inputType = JengaPlayer.InputType.none
+        inputType = ExamplePlayer.InputType.none
     };
 
     [Tooltip("Edit window copy of new player")]

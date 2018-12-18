@@ -51,7 +51,7 @@ public class ExtendedGameType : GameType
     {
         GameState.ChangeState(ExampleGameState.Starting);
         GameState.ChangeState(ExampleGameState.InProgress);
-        GameManager.StartCoroutine(GameTimerFunction());
+        GameManagerMonoBehaviour.StartCoroutine(GameTimerFunction());
     }
     // Called at the end of gameplay 
     // (things like score can be sent off or saved before players should load to the end screen)
@@ -60,7 +60,7 @@ public class ExtendedGameType : GameType
         if (GameState.Key == ExampleGameState.InProgress)
         {
             GameState.ChangeState(ExampleGameState.Ending);
-            GameManager.StopCoroutine(GameTimerFunction());
+            GameManagerMonoBehaviour.StopCoroutine(GameTimerFunction());
         }
     }
     // Called after the game has ended and is the very last thing the gamemode does
@@ -86,7 +86,7 @@ public class ExtendedGameType : GameType
         else
         {
             // Actual timer logic
-            while (GameTimer.Time < GameTimer.TimeLimit)
+            while (GameTimer.Time < GameTimer.TimeLimit && GameState.Key == ExampleGameState.InProgress)
             {
                 GameTimer.Time += Time.deltaTime;
                 yield return new WaitForFixedUpdate();

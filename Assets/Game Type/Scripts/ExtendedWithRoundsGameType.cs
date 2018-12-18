@@ -17,16 +17,16 @@ public class ExtendedWithRoundsGameType : ExtendedGameType {
     public override void EndGame()
     {
         base.EndGame();
-        GameManager.StopCoroutine(RoundTimerFunction());
+        GameManagerMonoBehaviour.StopCoroutine(RoundTimerFunction());
     }
     public virtual void EndRound()
     {
-        GameManager.StopCoroutine(RoundTimerFunction());
+        GameManagerMonoBehaviour.StopCoroutine(RoundTimerFunction());
     }
     public virtual void StartRound()
     {
         RoundTimer.Time = 0;
-        GameManager.StartCoroutine(RoundTimerFunction());
+        GameManagerMonoBehaviour.StartCoroutine(RoundTimerFunction());
         CurrentRound++;
     }
     public virtual IEnumerator RoundTimerFunction()

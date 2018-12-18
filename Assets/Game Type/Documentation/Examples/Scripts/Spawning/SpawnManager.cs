@@ -92,7 +92,7 @@ namespace Spawning
             //reactivate when not blocked
             spawn.StartBlockedCheck();
         }
-        public static bool InitalSpawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        public static bool InitalSpawn(Teams.TeamMember player, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
         {
             SpawnPoint spawn = GetInitalSpawnPoint(player.team, allowRespawnIfNoInital);
             if (spawn != null)
@@ -102,7 +102,7 @@ namespace Spawning
             }
             return false;
         }
-        public static int InitalSpawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        public static int InitalSpawn(List<Teams.TeamMember> players, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
         {
             int retVal = players.Count;
             for (int i = 0; i < players.Count;i++)
@@ -119,7 +119,7 @@ namespace Spawning
             }
             return retVal;
         }
-        public static bool Respawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true)
+        public static bool Respawn(Teams.TeamMember player, Vector3 offset, bool useSpawnRotation = true)
         {
             SpawnPoint spawn = GetRespawnPoint(player.team);
             if (spawn != null)
@@ -129,7 +129,7 @@ namespace Spawning
             }
             return false;
         }
-        public static int Respawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true)
+        public static int Respawn(List<Teams.TeamMember> players, Vector3 offset, bool useSpawnRotation = true)
         {
             int retVal = players.Count;
             for (int i = 0; i < players.Count; i++)

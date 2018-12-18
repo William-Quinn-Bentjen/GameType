@@ -14,11 +14,6 @@ public class PlayersDisplay : MonoBehaviour
     public List<PlayerDisplay> players;
     public List<PlayerInfo.PlayerData> playersData;
 
-    private void Awake()
-    {
-        AddPlayer(new PlayerInfo.PlayerData());
-    }
-
     [ContextMenu("AddPlayer")]
     public void Test()
     {
@@ -62,5 +57,6 @@ public class PlayersDisplay : MonoBehaviour
         }
         players.Clear();
         playersData.Clear();
+        GameManager.Instance.lobby.CanPlay();
     }
 }

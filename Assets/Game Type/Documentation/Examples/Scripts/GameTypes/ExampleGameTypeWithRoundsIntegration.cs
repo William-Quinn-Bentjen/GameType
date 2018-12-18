@@ -3,71 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
+public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType, ExampleInterface.IPlayerData
 {
+    public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
     public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-    public override bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
+
+    // Override 
+    public override bool BeginGame()
     {
-        if (base.AttemptJoin(team, member))
+        if (CanStart())
         {
-            EnsureExistance(team);
-            MemberJoinEffect(member);
+            // Entermap when done loading
+            GameManager.Instance.onLoadScene += EnterMap;
             return true;
         }
         return false;
     }
-    public virtual void MemberJoinEffect(Teams.TeamMember member)
+    public override bool CanStart()
     {
-        ExampleMember exampleMember = member.GetComponent<ExampleMember>();
-        if (exampleMember != null)
+        return (playerData != null && players != null &&
+            playerData.Count > 0 &&
+            playerData.Count == players.Count);
+    }
+    public override void EnterMap()
+    {
+        GameManager.Instance.onLoadScene -= EnterMap;
+        GameManager.Instance.lobby.isEnabled = false;
+        base.EnterMap();
+        Spawning.SpawnManager.ClearSpawnData();
+        Spawning.SpawnManager.GatherSpawnData();
+        StartRound();
+    }
+    public override void EndGame()
+    {
+        base.EndGame();
+        LeaveMap();
+    }
+    public override void LeaveMap()
+    {
+        base.LeaveMap();
+        GameManager.Instance.lobby.playersDisplay.RemoveAllPlayers();
+        foreach (PlayerInfo.PlayerData data in playerData)
         {
-            exampleMember.OnDeath = null;
-            exampleMember.OnDeath += EvaluateDeath;
+            GameManager.Instance.lobby.playersDisplay.AddPlayer(data);
         }
+        GameManager.Instance.lobby.isEnabled = true;
     }
-    public virtual void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
-    {
-        if (team != null)
-        {
-            team.OnSuccessfulJoin += MemberJoinEffect;
-        }
-    }
-    public virtual void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
-    {
-        //if (dead == killer && dead != null)
-        //{
-        //    //suicide
-        //}
-    }
-    public virtual void EvaluateWinCondition(Teams.Team team)
+
+    // Death
+    public virtual void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo)
     {
 
-    }
-    public virtual void EvaluateRoundEndCondition(Teams.Team team)
-    {
 
     }
-    public virtual void SetWinnerText(Teams.Team team)
-    {
-        // could be better but it works
-        GameManager gm = GameManager.GetComponent<GameManager>();
-        if (gm != null)
-        {
-            gm.SetWinnerText(team);
-        }
-    }
+
+    // Player Interface
     public virtual List<Teams.TeamMember> GetPlayers()
     {
         return players;
     }
-
     public virtual void SetPlayers(List<Teams.TeamMember> playersList)
     {
         players = playersList;
     }
 
-    public virtual bool IsFFA()
+    // Player Data Interface
+    public virtual List<PlayerInfo.PlayerData> GetPlayerData()
     {
-        return false;
+        return playerData;
+    }
+    public virtual void SetPlayerData(List<PlayerInfo.PlayerData> newPlayerData)
+    {
+        playerData = newPlayerData;
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JengaPlayer : Teams.TeamMember {
+public class ExamplePlayer : Teams.TeamMember {
     public Color personalColor;
     public enum InputType
     {

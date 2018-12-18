@@ -9,7 +9,7 @@ public class GameType : ScriptableObject {
     /// <summary>
     /// The GameManager this gametype is hooked up to (used for coroutines)
     /// </summary>
-    public MonoBehaviour GameManager;
+    public MonoBehaviour GameManagerMonoBehaviour;
     [System.Serializable]
     public struct TimerValues
     {
@@ -94,7 +94,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void StartGame()
     {
-        GameManager.StartCoroutine(GameTimerFunction());
+        GameManagerMonoBehaviour.StartCoroutine(GameTimerFunction());
     }
     /// <summary>
     /// Called at the end of gameplay
@@ -102,7 +102,7 @@ public class GameType : ScriptableObject {
     /// </summary>
     public virtual void EndGame()
     {
-        GameManager.StopCoroutine(GameTimerFunction());
+        GameManagerMonoBehaviour.StopCoroutine(GameTimerFunction());
     }
     /// <summary>
     /// Called after the game has ended and is the very last thing the gamemode does
