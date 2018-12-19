@@ -3,71 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
+public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType
 {
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-    public override bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
+    [Header("Player Settings")]
+    public JengaPlayer defaultPlayer;
+    public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
+    public List<JengaPlayer> players = new List<JengaPlayer>();
+    [Header("Win Conditions")]
+    [Tooltip("0 for no limit")]
+    [Range(0, 999999)]
+    public int maxRounds = 0; // 0 for no limit
+    public virtual void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo) { }
+    public virtual void CreatePlayers()
     {
-        if (base.AttemptJoin(team, member))
+        if (defaultPlayer != null)
         {
-            EnsureExistance(team);
-            MemberJoinEffect(member);
-            return true;
-        }
-        return false;
-    }
-    public virtual void MemberJoinEffect(Teams.TeamMember member)
-    {
-        ExampleMember exampleMember = member.GetComponent<ExampleMember>();
-        if (exampleMember != null)
-        {
-            exampleMember.OnDeath = null;
-            exampleMember.OnDeath += EvaluateDeath;
-        }
-    }
-    public virtual void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
-    {
-        if (team != null)
-        {
-            team.OnSuccessfulJoin += MemberJoinEffect;
+            foreach (PlayerInfo.PlayerData data in playerData)
+            {
+                //instantiate player
+                JengaPlayer player = Instantiate(defaultPlayer);
+                data.SetPlayerFromData(player);
+                players.Add(player);
+            }
         }
     }
-    public virtual void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
+    public override bool CanStart()
     {
-        //if (dead == killer && dead != null)
-        //{
-        //    //suicide
-        //}
+        return playerData.Count > 1;
     }
-    public virtual void EvaluateWinCondition(Teams.Team team)
+    public override void EnterMap()
     {
+        base.EnterMap();
+        Spawning.SpawnManager.ClearSpawnData();
+        Spawning.SpawnManager.GatherSpawnData();
+        CreatePlayers();
+        StartGame();
+    }
+    public override void EndGame()
+    {
+        base.EndGame();
+        LeaveMap();
+    }
 
-    }
-    public virtual void EvaluateRoundEndCondition(Teams.Team team)
+    public override void StartRound()
     {
-
+        Spawning.SpawnManager.InitalSpawn(players);
+        base.StartRound();
     }
-    public virtual void SetWinnerText(Teams.Team team)
+    public override void EndRound()
     {
-        // could be better but it works
-        GameManager gm = GameManager.GetComponent<GameManager>();
-        if (gm != null)
+        base.EndRound();
+        if (maxRounds > 0 && CurrentRound >= maxRounds)
         {
-            gm.SetWinnerText(team);
+            EndGame();
         }
-    }
-    public virtual List<Teams.TeamMember> GetPlayers()
-    {
-        return players;
-    }
-
-    public virtual void SetPlayers(List<Teams.TeamMember> playersList)
-    {
-        players = playersList;
-    }
-
-    public virtual bool IsFFA()
-    {
-        return false;
+        else
+        {
+            if (GameState.Key != ExampleGameState.Ending) StartRound();
+        }
     }
 }

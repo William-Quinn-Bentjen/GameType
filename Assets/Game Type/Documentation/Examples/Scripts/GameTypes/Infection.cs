@@ -48,10 +48,6 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
         AssignTeams();
         base.StartRound();
     }
-    public override bool IsFFA()
-    {
-        return true;
-    }
     // Use this for initialization
     public override void OnEnable()
     {
@@ -60,7 +56,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
     }
     public override bool CanStart()
     {
-        if (InfectedTeam != null && SurvivorTeam != null && players.Count > 1) 
+        if (base.CanStart() && InfectedTeam != null && SurvivorTeam != null) 
         {
             return true;
         }
@@ -90,7 +86,6 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
         if (SurvivorTeam.members.Count <= 0)
         {
             Debug.Log("Winning team: " + InfectedTeam.data.TeamName);
-            SetWinnerText(InfectedTeam);
         }
         else
         {
@@ -103,7 +98,6 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
                     score[member] += survivalWorth;
                 }
             }
-            SetWinnerText(SurvivorTeam);
         }
         Debug.Log("GameOver");
     }
@@ -119,7 +113,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
             Infect(exampleMember);
         }
     }
-    public override void MemberJoinEffect(Teams.TeamMember member)
+    public void MemberJoinEffect(Teams.TeamMember member)
     {
         ExampleMember exampleMember = member.GetComponent<ExampleMember>();
         if (exampleMember != null)
@@ -130,7 +124,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
             Disinfect(exampleMember);
         }
     }
-    public override void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
+    public void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
     {
         if (team == null)
         {
@@ -141,7 +135,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
             score.Add(member, startingScore);
         }
     }
-    public override void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
+    public void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
     {
         ExampleMember deadCheck = dead.GetComponent<ExampleMember>();
         if (deadCheck != null && deadCheck.alive)
@@ -196,7 +190,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
         }
         EvaluateWinCondition(dead.team);
     }
-    public virtual void Disinfect(ExampleMember member)
+    public void Disinfect(ExampleMember member)
     {
         if (forceSurvivorTeamColor) member.meshRenderer.material.color = member.personalColor;
         if (forceInfectedMesh) member.meshFilter.mesh = survivorMesh;
@@ -207,7 +201,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
         }
         member.team = SurvivorTeam;
     }
-    public virtual void Infect(ExampleMember member)
+    public void Infect(ExampleMember member)
     {
         if (forceInfectedMesh) member.meshFilter.mesh = infectedMesh;
         if (forceInfectedTeamColor) member.meshRenderer.material.color = InfectedTeam.data.TeamColor;
@@ -218,7 +212,7 @@ public class Infection : ExampleGameTypeWithRoundsIntegration
         }
         member.team = InfectedTeam;
     }
-    public override void EvaluateWinCondition(Teams.Team team)
+    public void EvaluateWinCondition(Teams.Team team)
     {
         if (GameState.Key == ExampleGameState.InProgress)
         {

@@ -16,116 +16,51 @@ public class FFASlayer : ExampleGameTypeIntegration {
     public int startingScore = 0;
     public int killWorth = 1;
     public int suicideWorth = -1;
+
     public Dictionary<Teams.TeamMember, float> score = new Dictionary<Teams.TeamMember, float>();
-    public override bool IsFFA()
+    public override void CreatePlayers()
     {
-        return true;
-    }
-
-
-    // Use this for initialization
-    public override void OnEnable()
-    {
-        base.OnEnable();
-        score = new Dictionary<Teams.TeamMember, float>();
-        players = new List<Teams.TeamMember>();
-    }
-    public override bool BeginGame()
-    {
-        ResetScoreboard();
-        if (base.BeginGame())
+        base.CreatePlayers();
+        if (forceColor == true)
         {
-            StartGame();
-            return true;
-        }
-        return false;
-    }
-    public void ResetScoreboard()
-    {
-        score.Clear();
-        players = new List<Teams.TeamMember>(FindObjectsOfType<Teams.TeamMember>());
-        foreach (Teams.TeamMember player in players)
-        {
-            if (!score.ContainsKey(player))
+            foreach (JengaPlayer player in players)
             {
-                score.Add(player, startingScore);
-                MemberJoinEffect(player);
+                player.SetColor(forcedColor);
+
             }
         }
     }
-    public override bool CanStart()
+    public override void EvaluateDeath(DeathInfo deathInfo)
     {
-        if (base.CanStart() && players.Count > 0)
+        if (deathInfo.Victim != null)
         {
-            return true;
-        }
-        return false;
-    }
-    // Called at the end of gameplay 
-    // (things like score can be sent off or saved before players should load to the end screen)
-    public override void EndGame()
-    {
-        if (GameState.CurrentState.Key == ExampleGameState.InProgress)
-        {
-            GameManager.StopCoroutine(GameTimerFunction());
-            GameState.ChangeState(ExampleGameState.Ending);
-            Debug.Log("GameOver");
-        }
-        
-    }
-    public override void MemberJoinEffect(Teams.TeamMember member)
-    {
-        ExampleMember exampleMember = member.GetComponent<ExampleMember>();
-        if (exampleMember != null)
-        {
-            if (forceColor) exampleMember.meshRenderer.material.color = forcedColor;
-            //remove later?
-            exampleMember.OnDeath = null;
-            exampleMember.OnDeath += EvaluateDeath;
-        }
-    }
-    public override void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
-    {
-        if (!score.ContainsKey(member))
-        {
-            MemberJoinEffect(member);
-            score.Add(member, startingScore);
-        }
-    }
-    public override void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
-    {
-        ExampleMember deadCheck = dead.GetComponent<ExampleMember>();
-        if (deadCheck != null && deadCheck.alive)
-        {
-            if (killer == null)
+            JengaPlayer killerPlayer = deathInfo.Killer.GetComponent<JengaPlayer>();
+            if (deathInfo.Killer != null && killerPlayer != null && deathInfo.Killer.gameObject != deathInfo.Victim)
             {
-                EnsureExistance(dead.team, dead);
-                score[dead] += suicideWorth;
-                Debug.Log("Suicide " + dead.gameObject.name);
+                //killed 
+                AddScore(killerPlayer, killWorth);
+                EvaluateWinCondition(killerPlayer);
             }
             else
             {
-                EnsureExistance(killer.team, killer);
-                score[killer] += killWorth;
-                EvaluateWinCondition(killer);
-                Debug.Log(killer.gameObject.name + " killed " + dead.name);
+                AddScore(deathInfo.Victim, suicideWorth);
             }
-            deadCheck.alive = false;
-            dead.gameObject.SetActive(false);
         }
     }
-    public void EvaluateWinCondition(Teams.TeamMember member)
+    public void AddScore(Teams.TeamMember member, float scoreToAdd)
+    {
+        if (!score.ContainsKey(member) && member != null) score.Add(member, startingScore);
+        score[member] += scoreToAdd;
+    }
+    public void EvaluateWinCondition(JengaPlayer player)
     {
         if (GameState.Key == ExampleGameState.InProgress)
         {
-            if (score[member] >= killsToWin)
+            if (score[player] >= killsToWin)
             {
-                Debug.Log("Winner team: " + member.name);
-                SetWinnerText(new Teams.Team() { data = new Teams.TeamData() { TeamName = member.name, TeamColor = (member as ExampleMember).personalColor } });
+                Debug.Log(player.name + " Won!");
                 EndGame();
             }
         }
     }
-
-
 }

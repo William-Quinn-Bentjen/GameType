@@ -92,22 +92,22 @@ namespace Spawning
             //reactivate when not blocked
             spawn.StartBlockedCheck();
         }
-        public static bool InitalSpawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        public static bool InitalSpawn(JengaPlayer player, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
         {
             SpawnPoint spawn = GetInitalSpawnPoint(player.team, allowRespawnIfNoInital);
             if (spawn != null)
             {
-                Spawn(spawn, player.transform, offset, useSpawnRotation);
+                Spawn(spawn, player.transform, player.spawnOffset, useSpawnRotation);
                 return true;
             }
             return false;
         }
-        public static int InitalSpawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
+        public static int InitalSpawn(List<JengaPlayer> players, bool useSpawnRotation = true, bool allowRespawnIfNoInital = true)
         {
             int retVal = players.Count;
             for (int i = 0; i < players.Count;i++)
             {
-                if (InitalSpawn(players[i], offset, useSpawnRotation, allowRespawnIfNoInital))
+                if (InitalSpawn(players[i], useSpawnRotation, allowRespawnIfNoInital))
                 {
                     players.RemoveAt(i);
                     i--;
@@ -119,22 +119,22 @@ namespace Spawning
             }
             return retVal;
         }
-        public static bool Respawn(JengaPlayer player, Vector3 offset, bool useSpawnRotation = true)
+        public static bool Respawn(JengaPlayer player, bool useSpawnRotation = true)
         {
             SpawnPoint spawn = GetRespawnPoint(player.team);
             if (spawn != null)
             {
-                Spawn(spawn, player.transform, offset, useSpawnRotation);
+                Spawn(spawn, player.transform, player.spawnOffset, useSpawnRotation);
                 return true;
             }
             return false;
         }
-        public static int Respawn(List<JengaPlayer> players, Vector3 offset, bool useSpawnRotation = true)
+        public static int Respawn(List<JengaPlayer> players, bool useSpawnRotation = true)
         {
             int retVal = players.Count;
             for (int i = 0; i < players.Count; i++)
             {
-                if (Respawn(players[i], offset, useSpawnRotation))
+                if (Respawn(players[i], useSpawnRotation))
                 {
                     players.RemoveAt(i);
                     i--;

@@ -3,71 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeIntegration : ExtendedGameType, GameTypes.Interfaces.IPlayers, GameTypes.Interfaces.IFFA
+public class ExampleGameTypeIntegration : ExtendedGameType
 {
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-    public override bool AttemptJoin(Teams.Team team, Teams.TeamMember member)
+    [Header("Player Settings")]
+    public JengaPlayer defaultPlayer;
+    public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
+    public List<JengaPlayer> players = new List<JengaPlayer>();
+    public struct DeathInfo
     {
-        if (base.AttemptJoin(team, member))
+        public Collision Collision;
+        public Collider Other;
+        public JengaPlayer Victim;
+        public GameObject Weapon;
+        public GameObject Killer;
+    }
+    public virtual void EvaluateDeath(DeathInfo deathInfo) { }
+    public virtual void CreatePlayers()
+    {
+        if (defaultPlayer != null)
         {
-            EnsureExistance(team);
-            MemberJoinEffect(member);
-            return true;
-        }
-        return false;
-    }
-    public virtual void MemberJoinEffect(Teams.TeamMember member)
-    {
-        ExampleMember exampleMember = member.GetComponent<ExampleMember>();
-        if (exampleMember != null)
-        {
-            exampleMember.OnDeath = null;
-            exampleMember.OnDeath += EvaluateDeath;
-        }
-    }
-    public virtual void EnsureExistance(Teams.Team team, Teams.TeamMember member = null)
-    {
-        if (team != null)
-        {
-            team.OnSuccessfulJoin += MemberJoinEffect;
-        }
-    }
-    public virtual void EvaluateDeath(Teams.TeamMember dead, Teams.TeamMember killer)
-    {
-        //if (dead == killer && dead != null)
-        //{
-        //    //suicide
-        //}
-    }
-    public virtual void EvaluateWinCondition(Teams.Team team)
-    {
-
-    }
-    public virtual void EvaluateRoundEndCondition(Teams.Team team)
-    {
-
-    }
-    public virtual void SetWinnerText(Teams.Team team)
-    {
-        // could be better but it works
-        GameManager gm = GameManager.GetComponent<GameManager>();
-        if (gm != null)
-        {
-            gm.SetWinnerText(team);
+            foreach (PlayerInfo.PlayerData data in playerData)
+            {
+                //instantiate player
+                JengaPlayer player = Instantiate(defaultPlayer);
+                data.SetPlayerFromData(player);
+                if (player.team != null) player.team.Join(player);
+                players.Add(player);
+            }
         }
     }
-    public virtual List<Teams.TeamMember> GetPlayers()
+    public override bool CanStart()
     {
-        return players;
+        return playerData.Count > 1;
     }
-
-    public virtual void SetPlayers(List<Teams.TeamMember> playersList)
+    public override void EnterMap()
     {
-        players = playersList;
+        base.EnterMap();
+        Spawning.SpawnManager.ClearSpawnData();
+        Spawning.SpawnManager.GatherSpawnData();
+        CreatePlayers();
+        StartGame();
     }
-
-    public virtual bool IsFFA()
+    public override void EndGame()
     {
-        return false;
+        base.EndGame();
+        LeaveMap();
     }
 }
