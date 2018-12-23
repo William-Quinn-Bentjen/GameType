@@ -37,7 +37,8 @@ public class GameManager : MonoBehaviour {
     }
     public Lobby lobby;
     public Map map;
-    public ExampleGameTypeIntegration GameType;
+    public GameType GameType;
+    public WinUI winUI;
     public List<Teams.TeamMember> players = new List<Teams.TeamMember>(); 
     // Use this for initialization
     void Awake()
@@ -56,6 +57,26 @@ public class GameManager : MonoBehaviour {
         if (GameType != null)
         {
             GameType.EndGame();
+            if (GameType is Infection)
+            {
+                Infection inf = (GameType as Infection);
+                inf.InfectedTeam.KickAll();
+                inf.SurvivorTeam.KickAll();
+            }
+            if (GameType is TeamSlayer)
+            {
+                TeamSlayer slayer = (GameType as TeamSlayer);
+                foreach (Teams.Team team in slayer.score.Keys)
+                {
+                    if (team != null)
+                    {
+                        team.KickAll();
+                    }
+                }
+                slayer.score.Clear();
+            }
+            //GameType = null;
         }
+
     }
 }

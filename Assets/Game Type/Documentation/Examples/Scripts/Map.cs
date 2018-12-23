@@ -31,7 +31,8 @@ public class Map : ScriptableObject
         sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
 #endif
         // Get scenes in build
-        
+
+        List<string> scenesInBuild = new List<string>();
         buildIndex = -1;
         for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
         {
@@ -80,24 +81,7 @@ public class Map : ScriptableObject
         {
             yield return null;
         }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(buildIndex));
         Debug.Log("Map Loaded!");
         onLoaded?.Invoke();
-    }
-    public void Unload()
-    {
-        int sceneCount = SceneManager.sceneCount;
-        for(int i = 0; i < sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-            if (scene.name == "Lobby")
-            {
-                SceneManager.SetActiveScene(scene);
-            }
-            else if (scene.buildIndex == buildIndex)
-            {
-                SceneManager.UnloadSceneAsync(scene);
-            }
-        }
     }
 }

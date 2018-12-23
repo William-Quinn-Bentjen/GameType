@@ -63,10 +63,10 @@ public class Race : ExampleGameTypeIntegration {
             finishedRacers.Add(player);
             Debug.Log(player.name + " Finished race with time " + GameTimer.Time);
         }
-        EvaluateWinCondition();
+        EvaluateWinCondition(null);
         
     }
-    public void EvaluateWinCondition()
+    public override void EvaluateWinCondition(Team team)
     {
         if (GameState.Key == ExampleGameState.InProgress)
         {
@@ -79,7 +79,7 @@ public class Race : ExampleGameTypeIntegration {
                     }
                     break;
                 case RaceEndConditions.EveryoneFinished:
-                    if (finishedRacers.Count >= players.Count)
+                    if (finishedRacers.Count == players.Count)
                     {
                         EndGame();
                     }
@@ -114,6 +114,7 @@ public class Race : ExampleGameTypeIntegration {
                     break;
             }
         }
+        base.EvaluateWinCondition(team);
     }
     public void GetCheckPoints()
     {
@@ -212,23 +213,18 @@ public class Race : ExampleGameTypeIntegration {
         if (first != null)
         {
             List<float> lapTimes = racePositions[first].LapTimes;
-            if (lapTimes != null && first != null)
+            if (lapTimes != null && lapTimes.Count > 0)
             {
-                float totalTime = 0;
-                foreach (float laptime in lapTimes)
-                {
-                    totalTime += laptime;
-                }
-                Debug.Log(first.name + " Finished first with a time of:" + totalTime);
+                SetWinnerText(new Team() { data = new TeamData() { TeamName = first.name + racePositions[first].LapTimes[racePositions[first].LapTimes.Count - 1], TeamColor = first.personalColor } });
             }
             else
             {
-                Debug.LogWarning(first.name + " Finished first (no lapTimes recorded)");
+                SetWinnerText(new Team { data = new TeamData { TeamName = first.name, TeamColor = first.personalColor } });
             }
         }
         else
         {
-            Debug.Log("No one finished");
+            SetWinnerText(new Team() { data = new TeamData() { TeamName = "No one finished" , TeamColor = Color.red} });
         }
     }
     // END CONDITIONS
@@ -238,7 +234,8 @@ public class Race : ExampleGameTypeIntegration {
     //within x secs of previous finisher    as long as someone else finished in the last x seconds
     //last to fin                           everyone must finish the race before the game ends
 
-    //time limit                            5mins is up (set to 0 for no limit) 
+    //time limit                            5mins is up
+    //all active racers dead                1st place finished but the 
     public IEnumerator EndTimer()
     {
         if (GameState.Key == ExampleGameState.InProgress)
@@ -250,7 +247,7 @@ public class Race : ExampleGameTypeIntegration {
                 withinTimer += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
-            if (GameState.Key == ExampleGameState.InProgress) EndGame();
+            EndGame();
         }
     }
 }

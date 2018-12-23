@@ -18,7 +18,7 @@ public class Lobby : MonoBehaviour {
             }
         }
     }
-    public ExampleGameTypeIntegration gameType
+    public GameType gameType
     {
         get
         {
@@ -43,23 +43,6 @@ public class Lobby : MonoBehaviour {
     public PlayersDisplay playersDisplay;
     public PlayerInfo playerInfo;
     public Button playButton;
-    public void CanPlay()
-    {
-        if (GameManager.Instance.GameType != null)
-        {
-            IPlayerData playerDataList = GameManager.Instance.GameType as IPlayerData;
-            if (playerDataList != null)
-            {
-                playerDataList.SetPlayerData(playersDisplay.playersData);
-            }
-            if (GameManager.Instance.GameType.CanStart())
-            {
-                playButton.interactable = true;
-                return;
-            }
-        }
-        playButton.interactable = false;
-    }
     private void Awake()
     {
         playersDisplay.AddPlayer(playersDisplay.playerDisplayPrefab.data);
@@ -71,32 +54,23 @@ public class Lobby : MonoBehaviour {
         gameObject.SetActive(false);
         map.onLoaded -= HideLobbyUI;
     }
-    private void ShowLobbyUI()
-    {
-        gameObject.SetActive(true);
-        if (gameType != null) gameType.GameState.States[ExtendedGameType.ExampleGameState.LeavingMap].OnStartInform = null;
-        map.onLoaded -= HideLobbyUI;
-    }
     public void Play()
     {
         if (gameType != null && map != null)
         {
-            gameType.GameManager = GameManager.Instance;
-            IPlayerData playerDataList = gameType as IPlayerData;
+            gameType.GameManagerMonoBehaviour = this;
+            ExampleInterface.IPlayerData playerDataList = gameType as ExampleInterface.IPlayerData;
             
             if (playerDataList != null) playerDataList.SetPlayerData(playersDisplay.playersData);
             if (gameType.BeginGame())
             {
-                map.onLoaded = HideLobbyUI;
-                map.onLoaded += gameType.EnterMap;
+                map.onLoaded += HideLobbyUI;
                 map.Load();
-                gameType.GameState.States[ExtendedGameType.ExampleGameState.LeavingMap].OnStartInform = map.Unload;
-                gameType.GameState.States[ExtendedGameType.ExampleGameState.LeavingMap].OnStartInform += ShowLobbyUI;
             }
         }
         else
         {
-            Debug.LogWarning("GameType and map can't be null");
+            Debug.LogWarning("GameType can't be null");
         }
     }
 }

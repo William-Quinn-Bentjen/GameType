@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b30cab674e38cba4c9019e86aeeb4583, type: 3}
   m_Name: Map
   m_EditorClassIdentifier: 
-  path: Assets/Game Type/Documentation/Examples/Scenes/FFA Slayer.unity
-  sceneAsset: {fileID: 102900000, guid: c6424d828174e1045ac0222d1f1d63ba, type: 3}
-  buildIndex: 1
-  sceneName: FFA Slayer
+  path: Assets/Game Type/Documentation/Examples/Scenes/Menu.unity
+  sceneAsset: {fileID: 102900000, guid: 1b918ac4e43aba1489a73f97e86330ac, type: 3}
+  buildIndex: 4
+  sceneName: Menu

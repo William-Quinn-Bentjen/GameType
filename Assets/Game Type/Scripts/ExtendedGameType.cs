@@ -206,18 +206,10 @@ public class ExtendedGameType : GameType
                 {
                     States.Add(newState.Key, newState);
                 }
-                if (ignoreOnEnd == false)
-                {
-                    if (_currentState.OnEnd != null) _currentState.OnEnd(_currentState, newState);
-                    if (_currentState.OnEndInform != null) _currentState.OnEndInform.Invoke();
-                }
+                if (ignoreOnStart == false && _currentState.OnEnd != null) _currentState.OnEnd(_currentState, newState);
                 State oldState = _currentState;
                 _currentState = newState;
-                if (ignoreOnStart == false)
-                {
-                    if (_currentState.OnStart != null) _currentState.OnStart(oldState, _currentState);
-                    if (_currentState.OnStartInform != null) _currentState.OnStartInform.Invoke();
-                }
+                if (ignoreOnEnd == false && _currentState.OnStart != null) _currentState.OnStart(oldState, _currentState);
             }
         }
         public void ChangeState(T newStateKey, bool ignoreOnStart = false, bool ignoreOnEnd = false)
@@ -257,21 +249,12 @@ public class ExtendedGameType : GameType
             public T Key;
 
             public delegate void OnStateChange(State oldState, State newState);
-            public delegate void OnStateChangeInform();
             /// <summary>
             /// Called when the state starts
             /// </summary>
-            public OnStateChangeInform OnStartInform;
-            /// <summary>
-            /// Called when the state ends
-            /// </summary>
-            public OnStateChangeInform OnEndInform;
-            /// <summary>
-            /// Called when the state starts (passes old state and new state)
-            /// </summary>
             public OnStateChange OnStart;
             /// <summary>
-            /// Called when the state ends (passes old state and new state)
+            /// Called when the state ends
             /// </summary>
             public OnStateChange OnEnd;
 

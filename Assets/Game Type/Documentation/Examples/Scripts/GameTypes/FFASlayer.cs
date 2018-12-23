@@ -21,12 +21,14 @@ public class FFASlayer : ExampleGameTypeIntegration {
     public override void CreatePlayers()
     {
         base.CreatePlayers();
-        
+        if (forceColor == true)
+        {
             foreach (JengaPlayer player in players)
             {
-                if (forceColor == true) player.SetColor(forcedColor);
-                player.OnDeath += EvaluateDeath;
+                player.SetColor(forcedColor);
+
             }
+        }
     }
     public override void EvaluateDeath(DeathInfo deathInfo)
     {
@@ -37,18 +39,12 @@ public class FFASlayer : ExampleGameTypeIntegration {
             {
                 //killed 
                 AddScore(killerPlayer, killWorth);
-                if (EvaluateWinCondition(killerPlayer))
-                {
-                    EndGame();
-                    return;
-                }
+                EvaluateWinCondition(killerPlayer);
             }
             else
             {
                 AddScore(deathInfo.Victim, suicideWorth);
             }
-            deathInfo.Victim.health = deathInfo.Victim.maxHealth;
-            Spawning.SpawnManager.Respawn(deathInfo.Victim);
         }
     }
     public void AddScore(Teams.TeamMember member, float scoreToAdd)
@@ -56,16 +52,15 @@ public class FFASlayer : ExampleGameTypeIntegration {
         if (!score.ContainsKey(member) && member != null) score.Add(member, startingScore);
         score[member] += scoreToAdd;
     }
-    public bool EvaluateWinCondition(JengaPlayer player)
+    public void EvaluateWinCondition(JengaPlayer player)
     {
         if (GameState.Key == ExampleGameState.InProgress)
         {
             if (score[player] >= killsToWin)
             {
                 Debug.Log(player.name + " Won!");
-                return true;
+                EndGame();
             }
         }
-        return false;
     }
 }

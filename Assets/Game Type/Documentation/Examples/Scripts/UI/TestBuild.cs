@@ -34,6 +34,10 @@ public class TestBuild : MonoBehaviour {
         {
             teamName = team.data.TeamName;
             teamMembers = team.members.Count;
+            if (member.team != null)
+            {
+                bool memberHasTeam = true;
+            }
         }
         TeamSlayer teamSlayer = (TeamSlayer)GameManager.Instance.GameType;
         if (team != null && teamSlayer != null && teamSlayer.score.ContainsKey(team))
