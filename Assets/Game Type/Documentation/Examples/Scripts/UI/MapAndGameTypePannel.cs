@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MapAndGameTypePannel : MonoBehaviour {
     public List<Map> maps = new List<Map>();
-    public List<GameType> gameTypes = new List<GameType>();
+    public List<ExampleGameTypeIntegration> gameTypes = new List<ExampleGameTypeIntegration>();
     public Dropdown mapDropdown;
     public Dropdown gameTypeDropdown;
     private void Reset()
@@ -16,13 +16,37 @@ public class MapAndGameTypePannel : MonoBehaviour {
                 case "Map":
                     mapDropdown = dropdown;
                     dropdown.options.Clear();
+                    dropdown.onValueChanged.RemoveAllListeners();
+                    dropdown.onValueChanged.AddListener(delegate { DropDownsChanged(); });
                     break;
                 case "GameType":
                     gameTypeDropdown = dropdown;
                     dropdown.options.Clear();
+                    dropdown.onValueChanged.RemoveAllListeners();
+                    dropdown.onValueChanged.AddListener(delegate { DropDownsChanged(); });
                     break;
             }
         }
+    }
+    void DropDownsChanged()
+    {
+        if (mapDropdown.value < maps.Count)
+        {
+            GameManager.Instance.map = maps[mapDropdown.value];
+        }
+        else
+        {
+            GameManager.Instance.map = null;
+        }
+        if (gameTypeDropdown.value < maps.Count)
+        {
+            GameManager.Instance.GameType = gameTypes[gameTypeDropdown.value];
+        }
+        else
+        {
+            GameManager.Instance.GameType = null;
+        }
+        GameManager.Instance.lobby.CanPlay();
     }
     private void Awake()
     {
@@ -54,13 +78,8 @@ public class MapAndGameTypePannel : MonoBehaviour {
                 gameTypeDropdown.options.Add(new Dropdown.OptionData(gameTypes[i].name));
             }
         }
-        if (maps.Count > 0)
-        {
-            GameManager.Instance.map = maps[0];
-        }
-        if (gameTypes.Count > 0)
-        {
-            GameManager.Instance.GameType = gameTypes[0];
-        }
+        gameTypeDropdown.value = 0;
+        mapDropdown.value = 0;
+        DropDownsChanged();
     }
 }

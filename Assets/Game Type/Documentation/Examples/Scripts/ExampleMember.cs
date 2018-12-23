@@ -29,7 +29,7 @@ public class ExampleMember : Teams.TeamMember {
         if (GameManager.Instance.GameType is ExampleGameTypeIntegration)
         {
             OnDeath = null;
-            OnDeath += (GameManager.Instance.GameType as ExampleGameTypeIntegration).EvaluateDeath;
+            //OnDeath += (GameManager.Instance.GameType as ExampleGameTypeIntegration).EvaluateDeath;
         }
         base.Awake();
     }
@@ -46,7 +46,7 @@ public class ExampleMember : Teams.TeamMember {
             ExampleBullet exampleBullet = collision.gameObject.GetComponent<ExampleBullet>();
             if (exampleBullet != null)
             {
-                Teams.TeamMember killer = exampleBullet.killer;
+                Teams.TeamMember killer = exampleBullet.Killer;
                 if (killer != null)
                 {
                     Death(killer);

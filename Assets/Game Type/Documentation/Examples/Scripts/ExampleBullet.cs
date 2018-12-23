@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExampleBullet : MonoBehaviour, Teams.ITeam {
-    public Teams.TeamMember killer;
+    public GameObject Gun;
+    public Teams.TeamMember Killer;
     public Rigidbody rb;
     public float force;
     public Teams.Team GetTeam()
     {
-        if (killer == null) return null;
-        return killer.team;
+        if (Killer == null) return null;
+        return Killer.team;
     }
 	// Use this for initialization
 	void Awake () {
+	}
+    public void Fire(Teams.TeamMember killer = null, Gun gun = null)
+    {
         if (rb == null)
         {
             rb = GetComponent<Rigidbody>();
@@ -21,11 +25,11 @@ public class ExampleBullet : MonoBehaviour, Teams.ITeam {
                 return;
             }
         }
+        if (killer != null && Killer != killer)
+        {
+            Killer = killer;
+        }
+        if (gun != null) Gun = gun.gameObject;
         rb.AddForce(transform.forward * force, ForceMode.Impulse);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
 }

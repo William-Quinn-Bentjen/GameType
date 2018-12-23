@@ -88,6 +88,12 @@ namespace Spawning
         {
             player.position = spawn.transform.position + offset;
             if (useSpawnRotation) player.rotation = spawn.transform.rotation;
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
             spawn.Active = false;
             //reactivate when not blocked
             spawn.StartBlockedCheck();
@@ -98,6 +104,7 @@ namespace Spawning
             if (spawn != null)
             {
                 Spawn(spawn, player.transform, player.spawnOffset, useSpawnRotation);
+                if (player.OnSpawn != null) player.OnSpawn.Invoke();
                 return true;
             }
             return false;
@@ -125,6 +132,7 @@ namespace Spawning
             if (spawn != null)
             {
                 Spawn(spawn, player.transform, player.spawnOffset, useSpawnRotation);
+                if (player.OnSpawn != null) player.OnSpawn.Invoke();
                 return true;
             }
             return false;

@@ -14,11 +14,6 @@ public class PlayersDisplay : MonoBehaviour
     public List<PlayerDisplay> players;
     public List<PlayerInfo.PlayerData> playersData;
 
-    private void Awake()
-    {
-        AddPlayer(new PlayerInfo.PlayerData());
-    }
-
     [ContextMenu("AddPlayer")]
     public void Test()
     {
@@ -33,7 +28,7 @@ public class PlayersDisplay : MonoBehaviour
         players.Add(newPlayer);
         playersData.Add(newPlayer.data);
         newPlayer.rectTransform.localPosition = newPlayer.rectTransform.localPosition + new Vector3(0, -((playerDisplayPrefab.rectTransform.rect.height * (players.Count - 1)) + (verticalSpaceing * (players.Count - 1))), 0);
-        RectTransform pos = newPlayer.GetComponent<RectTransform>();// = newPlayer.transform.position - newPlayer.GetComponent<RectTransform>()
+        GameManager.Instance.lobby.CanPlay();
     }
 
     public void RemovePlayer(PlayerInfo.PlayerData playerData)
@@ -53,6 +48,7 @@ public class PlayersDisplay : MonoBehaviour
             }
             Destroy(display.gameObject);
         }
+        GameManager.Instance.lobby.CanPlay();
     }
     public void RemoveAllPlayers()
     {
@@ -62,5 +58,6 @@ public class PlayersDisplay : MonoBehaviour
         }
         players.Clear();
         playersData.Clear();
+        GameManager.Instance.lobby.CanPlay();
     }
 }

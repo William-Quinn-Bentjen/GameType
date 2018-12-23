@@ -12,17 +12,24 @@ MonoBehaviour:
   m_Name: FFA Slayer
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
-  GameTimerValues:
+  GameTimer:
     TimeLimit: 0
-    Time: 0
-  RoundTimerValues:
-    TimeLimit: 0
-    Time: 286.91403
-  CurrentRound: 1
+    Time: 21.65732
+  defaultPlayer: {fileID: 114511835520971960, guid: 95ab26b2e423e344bbfb7c3bc65ef201,
+    type: 2}
+  playerData:
+  - playerName: 
+    personalColor: {r: 0, g: 0, b: 0, a: 0}
+    teamPreference: {fileID: 0}
+    inputType: 0
+  - playerName: 
+    personalColor: {r: 1, g: 1, b: 1, a: 1}
+    teamPreference: {fileID: 0}
+    inputType: 5
   players: []
   forceColor: 0
   forcedColor: {r: 1, g: 0, b: 0, a: 1}
-  killsToWin: 3
+  killsToWin: 1
   startingScore: 0
   killWorth: 1
   suicideWorth: -1

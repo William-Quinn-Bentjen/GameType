@@ -167,7 +167,7 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration {
     }
     public override void CreatePlayers()
     {
-        totalTeamPreferenceWeight = totalTeamPreferenceWeight += teamPrefenceWeights.Neutral + teamPrefenceWeights.Demolisher + teamPrefenceWeights.Survivors;
+        totalTeamPreferenceWeight = teamPrefenceWeights.Neutral + teamPrefenceWeights.Demolisher + teamPrefenceWeights.Survivors;
         base.CreatePlayers();
     }
 
