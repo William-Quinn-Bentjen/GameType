@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba9e13da2c0bab4cb77426cbe53ff41, type: 3}
+  m_Name: Default Scriptable Object
+  m_EditorClassIdentifier: 
+  rawFile: {fileID: 4900000, guid: e2ebe32fa19023142bb66f1ef75ce1e5, type: 3}
+  extention: .txt
+  lines: "using System.Collections;\nusing System.Collections.Generic;\nusing UnityEngine;\n\n[CreateAssetMenu(fileName
+    = \"#SCRIPTNAME#\", menuName = \"#SCRIPTNAME#\", order = 1)]\npublic class #SCRIPTNAME#
+    : ScriptableObject\n{\n\tpublic void Awake()\n\t{\n\t\t\n\t}\n\tpublic void OnEnable()\n\t{\n\t\t\n\t}\n\tpublic
+    void OnDisable()\n\t{\n\t\t\n\t}\n\tpublic void OnDestroy()\n\t{\n\t\t\n\t}\n}\n"

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aba9e13da2c0bab4cb77426cbe53ff41, type: 3}
+  m_Name: Default New Component
+  m_EditorClassIdentifier: 
+  rawFile: {fileID: 4900000, guid: 6c2e72e45f61ecb4d8c799071c2a20ea, type: 3}
+  extention: .cs
+  lines: "using System.Collections;\nusing System.Collections.Generic;\nusing UnityEngine;\n\npublic
+    class #SCRIPTNAME# : MonoBehaviour {\n\n    \t// Use this for initialization\n
+    \   \tvoid Start () {\n    \t\t\n    \t}\n\t\n\t// Update is called once per frame\n\tvoid
+    Update () {\n\t\t\n\t}\n}\n"
