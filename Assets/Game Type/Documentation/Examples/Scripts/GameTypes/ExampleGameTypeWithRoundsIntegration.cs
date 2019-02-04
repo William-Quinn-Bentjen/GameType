@@ -3,77 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType, ExampleInterface.IPlayerData
+public class ExampleGameTypeWithRoundsIntegration : ExtendedWithRoundsGameType
 {
+    [Header("Player Settings")]
+    public JengaPlayer defaultPlayer;
     public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-
-    // Override 
-    public override bool BeginGame()
+    public List<JengaPlayer> players = new List<JengaPlayer>();
+    [Header("Win Conditions")]
+    [Tooltip("0 for no limit")]
+    [Range(0, 999999)]
+    public int maxRounds = 0; // 0 for no limit
+    public virtual void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo) { }
+    public virtual void CreatePlayers()
     {
-        if (CanStart())
+        if (defaultPlayer != null)
         {
-            // Entermap when done loading
-            GameManager.Instance.onLoadScene += EnterMap;
-            return true;
+            foreach (PlayerInfo.PlayerData data in playerData)
+            {
+                //instantiate player
+                JengaPlayer player = Instantiate(defaultPlayer);
+                data.SetPlayerFromData(player);
+                players.Add(player);
+            }
         }
-        return false;
     }
     public override bool CanStart()
     {
-        return (playerData != null && players != null &&
-            playerData.Count > 0 &&
-            playerData.Count == players.Count);
+        return playerData.Count > 1;
     }
     public override void EnterMap()
     {
-        GameManager.Instance.onLoadScene -= EnterMap;
-        GameManager.Instance.lobby.isEnabled = false;
         base.EnterMap();
         Spawning.SpawnManager.ClearSpawnData();
         Spawning.SpawnManager.GatherSpawnData();
-        StartRound();
+        CreatePlayers();
+        StartGame();
     }
     public override void EndGame()
     {
         base.EndGame();
         LeaveMap();
     }
-    public override void LeaveMap()
+
+    public override void StartRound()
     {
-        base.LeaveMap();
-        GameManager.Instance.lobby.playersDisplay.RemoveAllPlayers();
-        foreach (PlayerInfo.PlayerData data in playerData)
+        Spawning.SpawnManager.InitalSpawn(players);
+        base.StartRound();
+    }
+    public override void EndRound()
+    {
+        base.EndRound();
+        if (maxRounds > 0 && CurrentRound >= maxRounds)
         {
-            GameManager.Instance.lobby.playersDisplay.AddPlayer(data);
+            EndGame();
         }
-        GameManager.Instance.lobby.isEnabled = true;
-    }
-
-    // Death
-    public virtual void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo)
-    {
-
-
-    }
-
-    // Player Interface
-    public virtual List<Teams.TeamMember> GetPlayers()
-    {
-        return players;
-    }
-    public virtual void SetPlayers(List<Teams.TeamMember> playersList)
-    {
-        players = playersList;
-    }
-
-    // Player Data Interface
-    public virtual List<PlayerInfo.PlayerData> GetPlayerData()
-    {
-        return playerData;
-    }
-    public virtual void SetPlayerData(List<PlayerInfo.PlayerData> newPlayerData)
-    {
-        playerData = newPlayerData;
+        else
+        {
+            if (GameState.Key != ExampleGameState.Ending) StartRound();
+        }
     }
 }

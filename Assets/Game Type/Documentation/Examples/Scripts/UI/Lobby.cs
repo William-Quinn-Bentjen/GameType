@@ -30,7 +30,17 @@ public class Lobby : MonoBehaviour {
             GameManager.Instance.GameType = value;
         }
     }
-    public int map;
+    public Map map
+    {
+        get
+        {
+            return GameManager.Instance.map;
+        }
+        set
+        {
+            GameManager.Instance.map = value;
+        }
+    }
     public PlayersDisplay playersDisplay;
     public PlayerInfo playerInfo;
     public Button playButton;
@@ -40,19 +50,23 @@ public class Lobby : MonoBehaviour {
         CanPlay();
 
     }
+    private void HideLobbyUI()
+    {
+        gameObject.SetActive(false);
+        map.onLoaded -= HideLobbyUI;
+    }
     public void Play()
     {
-        if (gameType != null)
+        if (gameType != null && map != null)
         {
             gameType.GameManagerMonoBehaviour = this;
             ExampleInterface.IPlayerData playerDataList = gameType as ExampleInterface.IPlayerData;
             
             if (playerDataList != null) playerDataList.SetPlayerData(playersDisplay.playersData);
-
-            // Can start checks done inside begin game
             if (gameType.BeginGame())
             {
-                if (map > 0 && map < SceneManager.sceneCountInBuildSettings) SceneManager.LoadSceneAsync(map);
+                map.onLoaded += HideLobbyUI;
+                map.Load();
             }
         }
         else

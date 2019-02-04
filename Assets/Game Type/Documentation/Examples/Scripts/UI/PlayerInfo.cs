@@ -16,6 +16,7 @@ public class PlayerInfo : MonoBehaviour {
         {
             player.name = playerName;
             player.personalColor = personalColor;
+            player.SetColor(personalColor);
             player.team = teamPreference;
             player.input = inputType;
         }

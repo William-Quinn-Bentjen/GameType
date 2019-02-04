@@ -25,9 +25,10 @@ public class ExtendedWithRoundsGameType : ExtendedGameType {
     }
     public virtual void StartRound()
     {
-        RoundTimer.Time = 0;
-        GameManagerMonoBehaviour.StartCoroutine(RoundTimerFunction());
+        // Starts at 0 so when the first round starts the round will be 1
         CurrentRound++;
+        RoundTimer.Time = 0;
+        GameManager.StartCoroutine(RoundTimerFunction());
     }
     public virtual IEnumerator RoundTimerFunction()
     {

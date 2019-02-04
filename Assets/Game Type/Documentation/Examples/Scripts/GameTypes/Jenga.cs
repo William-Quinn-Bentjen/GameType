@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Teams;
 using UnityEngine;
 [CreateAssetMenu(fileName = "Jenga", menuName = "GameType/Example/Jenga")]
-public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.ITeams {
+public class Jenga : ExampleGameTypeWithRoundsIntegration {
 
-    public float totalTeamPreferenceWeight = 0;
+    // win conditions
+    [Tooltip("0 for no limit")]
+    public float scoreToWin = 0; // 0 for no limit
     //teams
     [System.Serializable]
     public struct JengaTeams
@@ -21,11 +23,10 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
     //players and data
     [Header("Team Settings")]
     public JengaTeams teams = new JengaTeams();
-    public TeamWeights teamPrefenceWeights = new TeamWeights(1, 3, 5);
     //spawn settings
     [Header("Spawn Settings")]
-    public ExamplePlayer defaultJengaPlayer;
-    public Vector3 spawnOffset = Vector3.zero;
+    public float totalTeamPreferenceWeight = 0;
+    public TeamWeights teamPrefenceWeights = new TeamWeights(1, 3, 5);
     [System.Serializable]
     public struct TeamWeights
     {
@@ -42,13 +43,6 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
             Demolisher = d;
         }
     }
-    // win conditions
-    [Header("Game End Conditions")]
-    [Tooltip("0 for no limit")]
-    public float scoreToWin = 0; // 0 for no limit
-    [Tooltip("0 for no limit")]
-    [Range(0,999999)]
-    public int maxRounds = 0; // 0 for no limit
     [Header("Score Settings")]
     // score 
     [Tooltip("Multiplier for being eliminated as a survivor (this * # of players currently eliminated)")]
@@ -90,33 +84,7 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
             teams.Demolisher.data.TeamColor = Color.red;
         }
     }
-    void CreatePlayers()
-    {
-        if (defaultJengaPlayer != null)
-        {
-            players.Clear();
-            totalTeamPreferenceWeight = 0;
-            foreach (PlayerInfo.PlayerData data in playerData)
-            {
-                //instantiate player
-                ExamplePlayer player = Instantiate(defaultJengaPlayer);
-                data.SetPlayerFromData(player);
-                players.Add(player);
-                if (data.teamPreference == teams.Survivors)
-                {
-                    totalTeamPreferenceWeight += teamPrefenceWeights.Survivors;
-                }
-                else if (data.teamPreference == teams.Demolisher)
-                {
-                    totalTeamPreferenceWeight += teamPrefenceWeights.Demolisher;
-                }
-                else
-                {
-                    totalTeamPreferenceWeight += teamPrefenceWeights.Neutral;
-                }
-            }
-        }
-    }
+
     void AsignTeams()
     {
         float rand = Random.Range(0, totalTeamPreferenceWeight);
@@ -167,6 +135,7 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
             EndGame();
         }
     }
+    //utility overrided
     public override void EvaluateDeath(ExampleGameTypeIntegration.DeathInfo deathInfo)
     {
         if (deathInfo.Victim.team == teams.Survivors)
@@ -201,7 +170,11 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
             EndRound();
         }
     }
-    
+    public override void CreatePlayers()
+    {
+        totalTeamPreferenceWeight = totalTeamPreferenceWeight += teamPrefenceWeights.Neutral + teamPrefenceWeights.Demolisher + teamPrefenceWeights.Survivors;
+        base.CreatePlayers();
+    }
 
     //overrided 
     public override void OnEnable()
@@ -209,23 +182,17 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
         base.OnEnable();
         GenerateTeams();
     }
-    public override bool CanStart()
-    {
-        playerData = GameManager.Instance.lobby.playersDisplay.playersData;
-        CreatePlayers();
-        return base.CanStart();
-    }
     public override void EnterMap()
     {
-        base.EnterMap();
+        GameState.ChangeState(ExampleGameState.EnteringMap);
         Spawning.SpawnManager.ClearSpawnData();
         Spawning.SpawnManager.GatherSpawnData();
         SetupScores();
+        StartGame();
     }
     public override void StartRound()
     {
         AsignTeams();
-        Spawning.SpawnManager.InitalSpawn(players, spawnOffset);
         base.StartRound();
     }
     public override void EndRound()
@@ -253,24 +220,5 @@ public class Jenga : ExampleGameTypeWithRoundsIntegration, GameTypes.Interfaces.
             }
         }
         base.EndRound();
-        if (maxRounds > 0 && CurrentRound >= maxRounds)
-        {
-            EndGame();
-        }
-        else
-        {
-            if (GameState.Key != ExampleGameState.Ending) StartRound();
-        }
-    }
-    
-    // Teams Interface
-    public List<Team> GetTeams()
-    {
-        return teams.GetTeams();
-    }
-    // shouldnt be called just needed for teams interface
-    public void SetTeams(List<Team> teams)
-    {
-        throw new System.NotImplementedException();
     }
 }

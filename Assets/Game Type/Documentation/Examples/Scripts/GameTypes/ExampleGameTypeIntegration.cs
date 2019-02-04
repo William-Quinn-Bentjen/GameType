@@ -3,87 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ExampleGameTypeIntegration : ExtendedGameType, ExampleInterface.IPlayerData, GameTypes.Interfaces.IPlayers
+public class ExampleGameTypeIntegration : ExtendedGameType
 {
-    [Header("Read Only")]
+    [Header("Player Settings")]
+    public JengaPlayer defaultPlayer;
     public List<PlayerInfo.PlayerData> playerData = new List<PlayerInfo.PlayerData>();
-    public List<Teams.TeamMember> players = new List<Teams.TeamMember>();
-
-    // Override 
-    public override bool BeginGame()
+    public List<JengaPlayer> players = new List<JengaPlayer>();
+    public struct DeathInfo
     {
-        if (CanStart())
+        public Collision Collision;
+        public Collider Other;
+        public JengaPlayer Victim;
+        public GameObject Weapon;
+        public GameObject Killer;
+    }
+    public virtual void EvaluateDeath(DeathInfo deathInfo) { }
+    public virtual void CreatePlayers()
+    {
+        if (defaultPlayer != null)
         {
-            // Entermap when done loading
-            GameManager.Instance.onLoadScene += EnterMap;
-            return true;
+            foreach (PlayerInfo.PlayerData data in playerData)
+            {
+                //instantiate player
+                JengaPlayer player = Instantiate(defaultPlayer);
+                data.SetPlayerFromData(player);
+                if (player.team != null) player.team.Join(player);
+                players.Add(player);
+            }
         }
-        return false;
     }
     public override bool CanStart()
     {
-        return (playerData != null && players != null && 
-            playerData.Count > 0 &&
-            playerData.Count == players.Count);
+        return playerData.Count > 1;
     }
     public override void EnterMap()
     {
-        GameManager.Instance.onLoadScene -= EnterMap;
-        GameManager.Instance.lobby.isEnabled = false;
         base.EnterMap();
         Spawning.SpawnManager.ClearSpawnData();
         Spawning.SpawnManager.GatherSpawnData();
+        CreatePlayers();
         StartGame();
     }
     public override void EndGame()
     {
         base.EndGame();
         LeaveMap();
-    }
-    public override void LeaveMap()
-    {
-        base.LeaveMap();
-        GameManager.Instance.lobby.playersDisplay.RemoveAllPlayers();
-        foreach(PlayerInfo.PlayerData data in playerData)
-        {
-            GameManager.Instance.lobby.playersDisplay.AddPlayer(data);
-        }
-        GameManager.Instance.lobby.isEnabled = true;
-    }
-
-
-    // Death
-    public struct DeathInfo
-    {
-        public Collision Collision;
-        public Collider Other;
-
-        public ExamplePlayer Victim;
-        public GameObject Weapon;
-        public GameObject Killer;
-    }
-    public virtual void EvaluateDeath(DeathInfo deathInfo)
-    {
-
-    }
-
-    // Player Interface
-    public virtual List<Teams.TeamMember> GetPlayers()
-    {
-        return players;
-    }
-    public virtual void SetPlayers(List<Teams.TeamMember> playersList)
-    {
-        players = playersList;
-    }
-
-    // Player Data Interface
-    public virtual List<PlayerInfo.PlayerData> GetPlayerData()
-    {
-        return playerData;
-    }
-    public virtual void SetPlayerData(List<PlayerInfo.PlayerData> newPlayerData)
-    {
-        playerData = newPlayerData;
     }
 }
