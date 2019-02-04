@@ -47,6 +47,7 @@ public class Map : ScriptableObject
     }
     public void AddToBuild()
     {
+#if UNITY_EDITOR
         // Get scenes in build
         List<string> scenesInBuild = new List<string>();
         for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
@@ -58,11 +59,14 @@ public class Map : ScriptableObject
         if (scenesInBuild.Contains(path) == false)
         {
             // Add to build
-            List<UnityEditor.EditorBuildSettingsScene> scenes = new List<UnityEditor.EditorBuildSettingsScene>(UnityEditor.EditorBuildSettings.scenes);
-            scenes.Add(new UnityEditor.EditorBuildSettingsScene(path, true));
-            UnityEditor.EditorBuildSettings.scenes = scenes.ToArray();
+            List<EditorBuildSettingsScene> scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes)
+            {
+                new EditorBuildSettingsScene(path, true)
+            };
+            EditorBuildSettings.scenes = scenes.ToArray();
             UpdateInfo();
         }
+#endif
     }
     public void Load()
     {
