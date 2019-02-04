@@ -6050,7 +6050,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maps:
   - {fileID: 11400000, guid: 62c05e2260d05bb48b13cd390957bd5f, type: 2}
-  - {fileID: 11400000, guid: dc6d6ed8a953dcc46920a5f8be519e91, type: 2}
   gameTypes:
   - {fileID: 11400000, guid: 99f22f6c401fdbb4181894470ce90327, type: 2}
   mapDropdown: {fileID: 101301984}

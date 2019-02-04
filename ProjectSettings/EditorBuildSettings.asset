@@ -5,22 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Game Type/Documentation/Examples/Scenes/Menu.unity
-    guid: 1b918ac4e43aba1489a73f97e86330ac
-  - enabled: 1
+    path: Assets/Game Type/Documentation/Examples/Scenes/Lobby.unity
+    guid: 6b6f819375731574091f19e760acf1c8
+  - enabled: 0
     path: Assets/Game Type/Documentation/Examples/Scenes/Team Slayer.unity
     guid: 7ee3cf33733453d43b0818842f7892cb
   - enabled: 1
     path: Assets/Game Type/Documentation/Examples/Scenes/FFA Slayer.unity
     guid: c6424d828174e1045ac0222d1f1d63ba
-  - enabled: 1
+  - enabled: 0
     path: Assets/Game Type/Documentation/Examples/Scenes/Infection.unity
     guid: 190a44696c81f3e46b1a0f757449162c
-  - enabled: 1
-    path: Assets/Game Type/Documentation/Examples/Scenes/Menu.unity
-    guid: 1b918ac4e43aba1489a73f97e86330ac
-  - enabled: 1
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Game Type/Documentation/Examples/Scenes/Jenga.unity
     guid: efdae26d8f72ef044a0adc11c05f68a6
   m_configObjects: {}
